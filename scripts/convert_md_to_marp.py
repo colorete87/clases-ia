@@ -10,6 +10,47 @@ import argparse
 from pathlib import Path
 from typing import List, Optional
 
+def process_slide_breaks(content: str) -> str:
+    """Process slide break markers (----) and copy the last section title to new slides"""
+    import re
+    
+    lines = content.split('\n')
+    processed_lines = []
+    last_main_title = None  # Keep track of the last # or ## title
+    
+    i = 0
+    while i < len(lines):
+        line = lines[i]
+        
+        # Check if this is a heading line (only consider # and ##)
+        if line.strip().startswith('#'):
+            heading_level = len(line) - len(line.lstrip('#'))
+            heading_text = line.strip()
+            
+            # Only track # (level 1) and ## (level 2) headings
+            if heading_level <= 2:
+                last_main_title = heading_text
+            
+            processed_lines.append(line)
+        
+        # Check if this is a slide break marker (----)
+        elif line.strip() == '----':
+            # Replace ---- with --- (standard Marp slide separator)
+            processed_lines.append('---')
+            processed_lines.append('')
+            
+            # Copy only the last main title (# or ##) to the new slide
+            if last_main_title:
+                processed_lines.append(last_main_title)
+                processed_lines.append('')
+        
+        else:
+            processed_lines.append(line)
+        
+        i += 1
+    
+    return '\n'.join(processed_lines)
+
 def add_marp_header(content: str, theme: str = None, logo_left: str = None, 
                    logo_right: str = None, background: str = None, 
                    header_text: str = None, footer_text: str = None,
@@ -106,10 +147,12 @@ def add_marp_header(content: str, theme: str = None, logo_left: str = None,
     
     marp_header += "---\n\n"
     
-    # Process content to add HTML elements for logos, headers, and footers
-    processed_content = content
+    # First, process slide breaks (---- markers)
+    processed_content = process_slide_breaks(content)
+    
+    # Then, process content to add HTML elements for logos, headers, and footers
     if logo_left or logo_right or header_text or footer_text:
-        processed_content = add_data_attributes(content, header_text, footer_text, logo_left, logo_right)
+        processed_content = add_data_attributes(processed_content, header_text, footer_text, logo_left, logo_right)
     
     return marp_header + processed_content
 
