@@ -153,20 +153,38 @@ EOF
 # AUTOMATIC CONFIGURATION
 # =============================================================================
 
-# Search for project configuration file
+# Function to load theme-specific configuration
+load_theme_config() {
+    local theme_dir="$1"
+    local config_file=""
+    
+    # If theme_dir is provided, look for config there first
+    if [ -n "$theme_dir" ] && [ -f "$theme_dir/marp.config.sh" ]; then
+        config_file="$theme_dir/marp.config.sh"
+    else
+        # Fallback to project root or default locations
+        SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+        PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
+        
+        # Priority: 1) example theme, 2) project root
+        if [ -f "$PROJECT_DIR/themes/example/marp.config.sh" ]; then
+            config_file="$PROJECT_DIR/themes/example/marp.config.sh"
+        elif [ -f "$PROJECT_DIR/marp.config.sh" ]; then
+            config_file="$PROJECT_DIR/marp.config.sh"
+        else
+            config_file="$PROJECT_DIR/marp.config.sh"
+        fi
+    fi
+    
+    load_config "$config_file"
+}
+
+# Search for project configuration file (default behavior)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 
-# Load project configuration if it exists
-# Priority: 1) theme-example theme, 2) project root
-if [ -f "$PROJECT_DIR/themes/theme-example/marp.config.sh" ]; then
-    PROJECT_CONFIG="$PROJECT_DIR/themes/theme-example/marp.config.sh"
-elif [ -f "$PROJECT_DIR/marp.config.sh" ]; then
-    PROJECT_CONFIG="$PROJECT_DIR/marp.config.sh"
-else
-    PROJECT_CONFIG="$PROJECT_DIR/marp.config.sh"
-fi
-load_config "$PROJECT_CONFIG"
+# Load default configuration (will be overridden by load_theme_config if called)
+load_theme_config ""
 
 # Show configuration if requested
 if [ "${1:-}" = "--show-config" ]; then

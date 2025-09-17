@@ -1,2 +1,6 @@
 # Exclude all PDF files in themes directory
 themes/**/*.pdf
+
+# Exclude generated presentation folders for all themes
+themes/*/presentation/md_src/
+themes/*/presentation/marp_slides/

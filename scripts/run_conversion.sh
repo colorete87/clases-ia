@@ -81,6 +81,12 @@ fi
 # Save script path
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# Load configuration
+source "$SCRIPT_DIR/config.sh"
+
+# Load theme-specific configuration
+load_theme_config "$PROJECT_DIR"
+
 # Don't change to project directory, work from root directory
 
 if [ "$VERBOSE" = true ]; then

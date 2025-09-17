@@ -18,7 +18,7 @@ BACKGROUND ?= $(IMG_SRC_DIR)/background.png
 HEADER_TEXT ?= "My Company - Training Course"
 FOOTER_TEXT ?= "Confidential - All rights reserved"
 
-.PHONY: help setup install clean all convert md-to-marp watch config validate create-project default-logos show-config custom
+.PHONY: help setup install clean all convert md-to-marp watch config validate create-theme default-logos show-config custom open-pdfs
 
 # Default command
 help: ## Show this help
@@ -45,7 +45,8 @@ help: ## Show this help
 	@echo "  make all THEME=my-course      # Convert everything (my-course)"
 	@echo "  make convert VERBOSE=true     # Convert with verbose mode"
 	@echo "  make all FORCE=true           # Convert without any confirmations"
-	@echo "  make create-project NAME=ai   # Create new project 'ai'"
+	@echo "  make create-theme NAME=fine-tuning   # Create new theme 'fine-tuning'"
+	@echo "  make open-pdfs THEME=my-course    # Open all PDFs for theme"
 	@echo "  make all HEADER_TEXT='My Company' FOOTER_TEXT='Confidential' # Custom headers/footers"
 
 setup: ## Install Marp CLI
@@ -60,9 +61,9 @@ md-to-marp: ## Convert MD files to Marp format with logos/headers/footers
 		echo "⚠️  WARNING: Files exist in $(THEME_DIR)/presentation/marp_slides/"; \
 		echo "   This command will overwrite existing Marp files, including any manual adjustments."; \
 		echo ""; \
-		read -p "Do you want to continue? (y/N): " confirm && \
+		read -p "Do you want to overwrite marp_slides? (y/N): " confirm && \
 		if [ "$$confirm" != "y" ] && [ "$$confirm" != "Y" ]; then \
-			echo "❌ Conversion cancelled"; \
+			echo "❌ Marp conversion cancelled"; \
 			exit 1; \
 		fi; \
 	fi
@@ -81,42 +82,48 @@ md-to-marp: ## Convert MD files to Marp format with logos/headers/footers
 convert: ## Convert Marp files to PDF
 	@echo "🔄 Converting Marp to PDF..."
 	@if [ "$(VERBOSE)" = "true" ]; then \
-		$(SCRIPTS_DIR)/marp_tools.sh convert --project-dir $(THEME_DIR) -v; \
+		$(SCRIPTS_DIR)/marp_tools.sh convert --project-dir $(PWD)/$(THEME_DIR) -v; \
 	else \
-		$(SCRIPTS_DIR)/marp_tools.sh convert --project-dir $(THEME_DIR); \
+		$(SCRIPTS_DIR)/marp_tools.sh convert --project-dir $(PWD)/$(THEME_DIR); \
 	fi
 
 all: ## Convert everything: MD -> Marp -> PDF with logos/headers/footers
 	@echo "🔄 Converting everything: MD -> Marp -> PDF with logos, headers, and footers..."
-	@if [ "$(FORCE)" != "true" ] && [ -d "$(THEME_DIR)/presentation/marp_slides" ] && [ -n "$$(ls -A $(THEME_DIR)/presentation/marp_slides 2>/dev/null)" ]; then \
+	@skip_marp_conversion=false; \
+	if [ "$(FORCE)" != "true" ] && [ -d "$(THEME_DIR)/presentation/marp_slides" ] && [ -n "$$(ls -A $(THEME_DIR)/presentation/marp_slides 2>/dev/null)" ]; then \
 		echo "⚠️  WARNING: Files exist in $(THEME_DIR)/presentation/marp_slides/"; \
 		echo "   This command will overwrite existing Marp files, including any manual adjustments."; \
 		echo ""; \
-		read -p "Do you want to continue? (y/N): " confirm && \
+		read -p "Do you want to overwrite marp_slides? (y/N): " confirm && \
 		if [ "$$confirm" != "y" ] && [ "$$confirm" != "Y" ]; then \
-			echo "❌ Conversion cancelled"; \
-			exit 1; \
+			echo "⏭️  Skipping marp_slides generation, will continue with PDF generation using existing files..."; \
+			skip_marp_conversion=true; \
 		fi; \
-	fi
-	@make copy-images
-	@if [ "$(VERBOSE)" = "true" ]; then \
-		$(SCRIPTS_DIR)/marp_tools.sh md-to-marp --project-dir $(THEME_DIR) \
-			--logo-left "$(LOGO_LEFT)" --logo-right "$(LOGO_RIGHT)" \
-			--background "$(BACKGROUND)" --header $(HEADER_TEXT) --footer $(FOOTER_TEXT) -v; \
-		$(SCRIPTS_DIR)/marp_tools.sh convert --project-dir $(THEME_DIR) -v; \
-		$(SCRIPTS_DIR)/marp_tools.sh convert-program --project-dir $(THEME_DIR) -v; \
+	fi; \
+	make copy-images; \
+	if [ "$$skip_marp_conversion" = "false" ]; then \
+		if [ "$(VERBOSE)" = "true" ]; then \
+			$(SCRIPTS_DIR)/marp_tools.sh md-to-marp --project-dir $(PWD)/$(THEME_DIR) \
+				--logo-left "$(LOGO_LEFT)" --logo-right "$(LOGO_RIGHT)" \
+				--background "$(BACKGROUND)" --header $(HEADER_TEXT) --footer $(FOOTER_TEXT) -v; \
+		else \
+			$(SCRIPTS_DIR)/marp_tools.sh md-to-marp --project-dir $(PWD)/$(THEME_DIR) \
+				--logo-left "$(LOGO_LEFT)" --logo-right "$(LOGO_RIGHT)" \
+				--background "$(BACKGROUND)" --header $(HEADER_TEXT) --footer $(FOOTER_TEXT); \
+		fi; \
+	fi; \
+	if [ "$(VERBOSE)" = "true" ]; then \
+		$(SCRIPTS_DIR)/marp_tools.sh convert --project-dir $(PWD)/$(THEME_DIR) -v; \
+		$(SCRIPTS_DIR)/marp_tools.sh convert-program --project-dir $(PWD)/$(THEME_DIR) -v; \
 	else \
-		$(SCRIPTS_DIR)/marp_tools.sh md-to-marp --project-dir $(THEME_DIR) \
-			--logo-left "$(LOGO_LEFT)" --logo-right "$(LOGO_RIGHT)" \
-			--background "$(BACKGROUND)" --header $(HEADER_TEXT) --footer $(FOOTER_TEXT); \
-		$(SCRIPTS_DIR)/marp_tools.sh convert --project-dir $(THEME_DIR); \
-		$(SCRIPTS_DIR)/marp_tools.sh convert-program --project-dir $(THEME_DIR); \
+		$(SCRIPTS_DIR)/marp_tools.sh convert --project-dir $(PWD)/$(THEME_DIR); \
+		$(SCRIPTS_DIR)/marp_tools.sh convert-program --project-dir $(PWD)/$(THEME_DIR); \
 	fi
 
 watch: ## Watch mode (auto-regenerate)
 	@echo "👀 Starting watch mode..."
 	@echo "Press Ctrl+C to exit"
-	@$(SCRIPTS_DIR)/marp_tools.sh watch --project-dir $(THEME_DIR)
+	@$(SCRIPTS_DIR)/marp_tools.sh watch --project-dir $(PWD)/$(THEME_DIR)
 
 config: ## Show current configuration
 	@echo "📋 Current configuration:"
@@ -126,19 +133,18 @@ validate: ## Validate configuration
 	@echo "🔍 Validating configuration..."
 	@$(SCRIPTS_DIR)/marp_tools.sh validate
 
-create-project: ## Create new project (use: make create-project NAME=my-theme)
+create-theme: ## Create new theme (use: make create-theme NAME=my-theme)
 	@if [ -z "$(NAME)" ]; then \
-		echo "❌ Error: Specify project name with NAME=my-theme"; \
-		echo "Example: make create-project NAME=my-ai-course"; \
+		echo "❌ Error: Specify theme name with NAME=my-theme"; \
+		echo "Example: make create-theme NAME=fine-tuning"; \
 		exit 1; \
 	fi
-	@echo "🚀 Creating project: $(NAME)"
-	@$(SCRIPTS_DIR)/create_project_template.sh $(NAME)
-	@echo "✅ Project '$(NAME)' created successfully"
+	@echo "🚀 Creating theme: $(NAME)"
+	@$(SCRIPTS_DIR)/create_theme_template.sh $(NAME)
+	@echo "✅ Theme '$(NAME)' created successfully in themes/$(NAME)/"
 	@echo "Next steps:"
-	@echo "  cd $(NAME)"
-	@echo "  make setup"
-	@echo "  make all"
+	@echo "  make all THEME=$(NAME)"
+	@echo "  make watch THEME=$(NAME)"
 
 clean: ## Clean PDF files only (preserves marp_slides)
 	@echo "🧹 Cleaning PDF files only..."
@@ -273,6 +279,51 @@ copy-images: ## Copy images to working directory
 		echo "❌ No image directory"; \
 	fi
 
+open-pdfs: ## Open program.pdf and all PDFs in pdf_slides directory
+	@echo "📖 Opening PDF files for theme '$(THEME)'..."
+	@pdf_count=0; \
+	if [ -f "$(THEME_DIR)/program.pdf" ]; then \
+		echo "  Opening $(THEME_DIR)/program.pdf"; \
+		if command -v xdg-open >/dev/null 2>&1; then \
+			xdg-open "$(THEME_DIR)/program.pdf" 2>/dev/null & \
+		elif command -v evince >/dev/null 2>&1; then \
+			evince "$(THEME_DIR)/program.pdf" 2>/dev/null & \
+		elif command -v okular >/dev/null 2>&1; then \
+			okular "$(THEME_DIR)/program.pdf" 2>/dev/null & \
+		elif command -v firefox >/dev/null 2>&1; then \
+			firefox "$(THEME_DIR)/program.pdf" 2>/dev/null & \
+		else \
+			echo "❌ No PDF viewer found. Install evince, okular, or another PDF viewer."; \
+		fi; \
+		pdf_count=$$((pdf_count + 1)); \
+	else \
+		echo "  ⚠️  program.pdf not found in $(THEME_DIR)/"; \
+	fi; \
+	if [ -d "$(THEME_DIR)/presentation/pdf_slides" ] && [ -n "$$(ls -A $(THEME_DIR)/presentation/pdf_slides/*.pdf 2>/dev/null)" ]; then \
+		for pdf in $(THEME_DIR)/presentation/pdf_slides/*.pdf; do \
+			if [ -f "$$pdf" ]; then \
+				echo "  Opening $$pdf"; \
+				if command -v xdg-open >/dev/null 2>&1; then \
+					xdg-open "$$pdf" 2>/dev/null & \
+				elif command -v evince >/dev/null 2>&1; then \
+					evince "$$pdf" 2>/dev/null & \
+				elif command -v okular >/dev/null 2>&1; then \
+					okular "$$pdf" 2>/dev/null & \
+				elif command -v firefox >/dev/null 2>&1; then \
+					firefox "$$pdf" 2>/dev/null & \
+				fi; \
+				pdf_count=$$((pdf_count + 1)); \
+			fi; \
+		done; \
+	else \
+		echo "  ⚠️  No PDFs found in $(THEME_DIR)/presentation/pdf_slides/"; \
+	fi; \
+	if [ $$pdf_count -eq 0 ]; then \
+		echo "❌ No PDF files found. Run 'make all' first to generate PDFs."; \
+	else \
+		echo "✅ Opened $$pdf_count PDF file(s)"; \
+	fi
+
 # Logo and styling management
 default-logos: ## Create default logo placeholders
 	@echo "🎨 Creating default logo placeholders..."
@@ -338,11 +389,11 @@ custom: ## Convert with custom logos/headers/footers (interactive)
 	fi; \
 	echo ""; \
 	echo "🔄 Converting with custom settings..."; \
-	$(SCRIPTS_DIR)/marp_tools.sh md-to-marp --project-dir $(THEME_DIR) \
+	$(SCRIPTS_DIR)/marp_tools.sh md-to-marp --project-dir $(PWD)/$(THEME_DIR) \
 		--logo-left "$$left_logo" --logo-right "$$right_logo" \
 		--background "$$bg_image" --header "$$header_text" --footer "$$footer_text"; \
-	$(SCRIPTS_DIR)/marp_tools.sh convert --project-dir $(THEME_DIR); \
-	$(SCRIPTS_DIR)/marp_tools.sh convert-program --project-dir $(THEME_DIR); \
+	$(SCRIPTS_DIR)/marp_tools.sh convert --project-dir $(PWD)/$(THEME_DIR); \
+	$(SCRIPTS_DIR)/marp_tools.sh convert-program --project-dir $(PWD)/$(THEME_DIR); \
 	echo "✅ Custom conversion completed!"
 
 # Development commands
@@ -354,19 +405,19 @@ dev-setup: ## Complete setup for development
 
 test: ## Test scripts with example theme
 	@echo "🧪 Testing scripts..."
-	@make create-project NAME=test-theme
-	@cd test-theme && make all
+	@make create-theme NAME=test-theme
+	@make all THEME=test-theme
 	@echo "✅ Test completed"
-	@echo "Generated files in test-theme/presentation/pdf_slides/"
+	@echo "Generated files in themes/test-theme/presentation/pdf_slides/"
 
 # Specific help commands
 help-scripts: ## Show scripts help
 	@echo "📖 Marp scripts help:"
 	@$(SCRIPTS_DIR)/marp_tools.sh --help
 
-help-create: ## Show help for creating projects
-	@echo "📖 Help for creating projects:"
-	@$(SCRIPTS_DIR)/create_project_template.sh --help
+help-create: ## Show help for creating themes
+	@echo "📖 Help for creating themes:"
+	@$(SCRIPTS_DIR)/create_theme_template.sh --help
 
 # Information commands
 info: ## Show system information

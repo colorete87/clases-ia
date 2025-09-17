@@ -157,6 +157,11 @@ cmd_md_to_marp() {
         esac
     done
     
+    # Load theme-specific configuration if project_dir is specified
+    if [ -n "$project_dir" ]; then
+        load_theme_config "$project_dir"
+    fi
+    
     # Build command
     local cmd="python3 $SCRIPT_DIR/convert_md_to_marp.py"
     cmd="$cmd '$md_src'"
@@ -207,8 +212,15 @@ cmd_convert() {
     
     # Process specific convert arguments
     local convert_args=()
+    local project_dir=""
+    
     while [[ $# -gt 0 ]]; do
         case $1 in
+            --project-dir)
+                project_dir="$2"
+                convert_args+=("$1" "$2")
+                shift 2
+                ;;
             -v|--verbose)
                 convert_args+=("$1")
                 shift
@@ -224,6 +236,11 @@ cmd_convert() {
                 ;;
         esac
     done
+    
+    # Load theme-specific configuration if project_dir is specified
+    if [ -n "$project_dir" ]; then
+        load_theme_config "$project_dir"
+    fi
     
     run_command "bash $SCRIPT_DIR/run_conversion.sh" "${convert_args[@]}"
 }
@@ -261,6 +278,9 @@ cmd_convert_program() {
     if [ -z "$project_dir" ]; then
         project_dir="."
     fi
+    
+    # Load theme-specific configuration
+    load_theme_config "$project_dir"
     
     # Look for program.md in project directory
     local program_file="$project_dir/program.md"
