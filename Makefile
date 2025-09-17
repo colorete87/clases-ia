@@ -2,7 +2,7 @@
 # Facilitates the use of presentation conversion scripts
 
 # Default configuration
-THEME ?= fine-tuning
+THEME ?= $(shell [ -f .current-theme ] && cat .current-theme || echo "example")
 VERBOSE ?= false
 FORCE ?= false
 
@@ -18,7 +18,7 @@ BACKGROUND ?= $(IMG_SRC_DIR)/background.png
 HEADER_TEXT ?= "My Company - Training Course"
 FOOTER_TEXT ?= "Confidential - All rights reserved"
 
-.PHONY: help setup install clean all convert md-to-marp watch config validate create-theme default-logos show-config custom open-pdfs
+.PHONY: help setup install clean all convert md-to-marp watch config validate create-theme default-logos show-config custom open-pdfs set-theme get-theme
 
 # Default command
 help: ## Show this help
@@ -30,7 +30,7 @@ help: ## Show this help
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  %-15s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 	@echo ""
 	@echo "Variables:"
-	@echo "  THEME           Theme/project to use (default: fine-tuning)"
+	@echo "  THEME           Theme/project to use (default: example)"
 	@echo "  VERBOSE         Verbose mode (default: false)"
 	@echo "  FORCE           Force mode - skip all confirmations (default: false)"
 	@echo "  LOGO_LEFT       Left logo path (default: $(IMG_SRC_DIR)/logo_left.png)"
@@ -45,9 +45,11 @@ help: ## Show this help
 	@echo "  make all THEME=my-course      # Convert everything (my-course)"
 	@echo "  make convert VERBOSE=true     # Convert with verbose mode"
 	@echo "  make all FORCE=true           # Convert without any confirmations"
-	@echo "  make create-theme NAME=fine-tuning   # Create new theme 'fine-tuning'"
+	@echo "  make create-theme NAME=example   # Create new theme 'example'"
 	@echo "  make open-pdfs THEME=my-course    # Open all PDFs for theme"
 	@echo "  make all HEADER_TEXT='My Company' FOOTER_TEXT='Confidential' # Custom headers/footers"
+	@echo "  make set-theme NAME=my-theme      # Set default theme to 'my-theme'"
+	@echo "  make get-theme                    # Show current default theme"
 
 setup: ## Install Marp CLI
 	@echo "🚀 Installing Marp CLI..."
@@ -136,7 +138,7 @@ validate: ## Validate configuration
 create-theme: ## Create new theme (use: make create-theme NAME=my-theme)
 	@if [ -z "$(NAME)" ]; then \
 		echo "❌ Error: Specify theme name with NAME=my-theme"; \
-		echo "Example: make create-theme NAME=fine-tuning"; \
+		echo "Example: make create-theme NAME=example"; \
 		exit 1; \
 	fi
 	@echo "🚀 Creating theme: $(NAME)"
@@ -444,6 +446,52 @@ backup: ## Create backup of MD files
 	@mkdir -p backups
 	@tar -czf backups/md-backup-$(shell date +%Y%m%d-%H%M%S).tar.gz */presentation/md_src/ */program.md 2>/dev/null || true
 	@echo "✅ Backup created in backups/"
+
+# Theme management commands
+set-theme: ## Set default theme (use: make set-theme NAME=my-theme)
+	@if [ -z "$(NAME)" ]; then \
+		echo "❌ Error: Specify theme name with NAME=my-theme"; \
+		echo "Example: make set-theme NAME=example"; \
+		exit 1; \
+	fi
+	@if [ ! -d "themes/$(NAME)" ]; then \
+		echo "❌ Error: Theme '$(NAME)' does not exist"; \
+		echo "Available themes:"; \
+		for dir in themes/*/; do \
+			if [ -d "$$dir/presentation" ]; then \
+				echo "  - $$(basename $$dir)"; \
+			fi; \
+		done; \
+		exit 1; \
+	fi
+	@echo "$(NAME)" > .current-theme
+	@echo "✅ Default theme set to '$(NAME)'"
+	@echo "Now you can run 'make all' without specifying THEME"
+
+get-theme: ## Show current default theme
+	@if [ -f ".current-theme" ]; then \
+		current_theme=$$(cat .current-theme); \
+		echo "📋 Current default theme: $$current_theme"; \
+		if [ -d "themes/$$current_theme" ]; then \
+			echo "✅ Theme exists and is ready to use"; \
+		else \
+			echo "❌ Warning: Theme directory not found"; \
+		fi; \
+	else \
+		echo "📋 No default theme set (using fallback: example)"; \
+	fi
+	@echo ""
+	@echo "Available themes:"
+	@for dir in themes/*/; do \
+		if [ -d "$$dir/presentation" ]; then \
+			theme_name=$$(basename $$dir); \
+			if [ -f ".current-theme" ] && [ "$$theme_name" = "$$(cat .current-theme)" ]; then \
+				echo "  ✓ $$theme_name (current)"; \
+			else \
+				echo "    $$theme_name"; \
+			fi; \
+		fi; \
+	done
 
 # Dependency installation commands
 install-deps: ## Install system dependencies
