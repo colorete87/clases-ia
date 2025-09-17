@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Script para convertir archivos Markdown a formato Marp
-Convierte archivos .md de md_src/ a marp_slides/ con formato Marp
-Reutilizable para diferentes proyectos/temas
+Script to convert Markdown files to Marp format
+Converts .md files from md_src/ to marp_slides/ with Marp format
+Reusable for different projects/themes
 """
 
 import os
@@ -14,7 +14,7 @@ def add_marp_header(content: str, theme: str = None, logo_left: str = None,
                    logo_right: str = None, background: str = None, 
                    header_text: str = None, footer_text: str = None,
                    marp_slides_dir: str = None) -> str:
-    """Agrega el header de Marp al contenido Markdown"""
+    """Add Marp header to Markdown content"""
     marp_header = "---\nmarp: true\n"
     
     if theme:
@@ -173,47 +173,47 @@ def convert_md_to_marp(md_src_dir: str, marp_slides_dir: str, theme: str = None,
                       logo_left: str = None, logo_right: str = None, 
                       background: str = None, header_text: str = None, 
                       footer_text: str = None) -> List[str]:
-    """Convierte archivos Markdown a formato Marp"""
+    """Convert Markdown files to Marp format"""
     
     md_src_path = Path(md_src_dir)
     if not md_src_path.exists():
-        raise FileNotFoundError(f"El directorio {md_src_dir} no existe")
+        raise FileNotFoundError(f"Directory {md_src_dir} does not exist")
     
     marp_slides_path = Path(marp_slides_dir)
     marp_slides_path.mkdir(parents=True, exist_ok=True)
     
-    # Buscar todos los archivos Markdown en md_src
+    # Find all Markdown files in md_src
     md_files = list(md_src_path.glob("*.md"))
     
     if not md_files:
-        print(f"No se encontraron archivos .md en {md_src_dir}")
+        print(f"No .md files found in {md_src_dir}")
         return []
     
-    print(f"Encontrados {len(md_files)} archivos Markdown para convertir a Marp")
+    print(f"Found {len(md_files)} Markdown files to convert to Marp")
     
     converted_files = []
     
     for md_file in md_files:
         try:
-            # Leer contenido del archivo
+            # Read file content
             with open(md_file, 'r', encoding='utf-8') as f:
                 content = f.read()
             
-            # Agregar header de Marp
+            # Add Marp header
             marp_content = add_marp_header(content, theme, logo_left, logo_right, background, header_text, footer_text, str(marp_slides_path))
             
-            # Crear archivo Marp
+            # Create Marp file
             marp_file = marp_slides_path / md_file.name
             with open(marp_file, 'w', encoding='utf-8') as f:
                 f.write(marp_content)
             
             converted_files.append(str(marp_file))
-            print(f"✓ Convertido: {md_file.name} -> {marp_file.name}")
+            print(f"✓ Converted: {md_file.name} -> {marp_file.name}")
             
         except Exception as e:
-            print(f"✗ Error convirtiendo {md_file.name}: {e}")
+            print(f"✗ Error converting {md_file.name}: {e}")
     
-    # Procesar archivo programa si existe
+    # Process program file if it exists
     if programa_file:
         programa_path = Path(programa_file)
         if programa_path.exists():
@@ -228,53 +228,53 @@ def convert_md_to_marp(md_src_dir: str, marp_slides_dir: str, theme: str = None,
                     f.write(marp_content)
                 
                 converted_files.append(str(programa_marp))
-                print(f"✓ Convertido programa: {programa_path.name} -> {programa_marp.name}")
+                print(f"✓ Converted program: {programa_path.name} -> {programa_marp.name}")
                 
             except Exception as e:
-                print(f"✗ Error convirtiendo programa {programa_path.name}: {e}")
+                print(f"✗ Error converting program {programa_path.name}: {e}")
     
     return converted_files
 
 def main():
-    """Función principal del script"""
-    parser = argparse.ArgumentParser(description="Convierte archivos Markdown a formato Marp")
+    """Main function of the script"""
+    parser = argparse.ArgumentParser(description="Convert Markdown files to Marp format")
     parser.add_argument("md_src", nargs="?", default="presentation/md_src", 
-                       help="Directorio con archivos Markdown fuente (default: presentation/md_src)")
+                       help="Directory with source Markdown files (default: presentation/md_src)")
     parser.add_argument("-o", "--output", default="presentation/marp_slides",
-                       help="Directorio de salida para archivos Marp (default: presentation/marp_slides)")
-    parser.add_argument("-t", "--theme", help="Tema CSS a usar")
-    parser.add_argument("-s", "--style", help="Archivo CSS de estilos (default: presentation/style.css)")
-    parser.add_argument("-p", "--programa", help="Archivo program.md (default: program.md)")
-    parser.add_argument("--logo-left", help="Ruta al logo izquierdo (upper-left)")
-    parser.add_argument("--logo-right", help="Ruta al logo derecho (upper-right)")
-    parser.add_argument("--background", help="Ruta a la imagen de fondo")
-    parser.add_argument("--header", help="Texto del header (aparece en la parte superior)")
-    parser.add_argument("--footer", help="Texto del footer (aparece en la parte inferior)")
-    parser.add_argument("--project-dir", help="Directorio del proyecto (default: directorio padre del script)")
+                       help="Output directory for Marp files (default: presentation/marp_slides)")
+    parser.add_argument("-t", "--theme", help="CSS theme to use")
+    parser.add_argument("-s", "--style", help="CSS styles file (default: presentation/style.css)")
+    parser.add_argument("-p", "--programa", help="program.md file (default: program.md)")
+    parser.add_argument("--logo-left", help="Path to left logo (upper-left)")
+    parser.add_argument("--logo-right", help="Path to right logo (upper-right)")
+    parser.add_argument("--background", help="Path to background image")
+    parser.add_argument("--header", help="Header text (appears at the top)")
+    parser.add_argument("--footer", help="Footer text (appears at the bottom)")
+    parser.add_argument("--project-dir", help="Project directory (default: script parent directory)")
     
     args = parser.parse_args()
     
-    # Determinar directorio del proyecto
+    # Determine project directory
     if args.project_dir:
         project_dir = Path(args.project_dir)
     else:
         script_dir = Path(__file__).parent
         project_dir = script_dir.parent
     
-    # Resolver rutas relativas al directorio del proyecto
+    # Resolve paths relative to project directory
     md_src_path = project_dir / args.md_src
     marp_slides_path = project_dir / args.output
     
     if not md_src_path.exists():
-        print(f"Error: {md_src_path} no existe")
-        print(f"Buscando en: {project_dir}")
+        print(f"Error: {md_src_path} does not exist")
+        print(f"Looking in: {project_dir}")
         return 1
     
     if not md_src_path.is_dir():
-        print(f"Error: {md_src_path} no es un directorio")
+        print(f"Error: {md_src_path} is not a directory")
         return 1
     
-    # Resolver archivo de programa
+    # Resolve program file
     programa_file = None
     if args.programa:
         programa_file = str(project_dir / args.programa)
@@ -283,7 +283,7 @@ def main():
         if not Path(programa_file).exists():
             programa_file = None
     
-    # Resolver archivo de estilos
+    # Resolve styles file
     style_css = None
     if args.style:
         style_css = str(project_dir / args.style)
@@ -293,7 +293,7 @@ def main():
             style_css = None
     
     try:
-        # Convertir archivos Markdown a Marp
+        # Convert Markdown files to Marp
         marp_files = convert_md_to_marp(
             str(md_src_path), 
             str(marp_slides_path), 
@@ -308,17 +308,17 @@ def main():
         )
         
         if marp_files:
-            print(f"\n🎉 Conversión completada!")
-            print(f"Archivos Marp generados: {len(marp_files)}")
-            print(f"Directorio Marp: {Path(marp_files[0]).parent}")
+            print(f"\n🎉 Conversion completed!")
+            print(f"Generated Marp files: {len(marp_files)}")
+            print(f"Marp directory: {Path(marp_files[0]).parent}")
         else:
-            print("❌ No se pudieron generar archivos Marp")
+            print("❌ Could not generate Marp files")
             return 1
         
-        print("\n📝 Próximos pasos:")
-        print("1. Revisa los archivos en marp_slides/")
-        print("2. Ejecuta: ./scripts/marp_tools.sh convert")
-        print("3. O usa: ./scripts/marp_tools.sh watch")
+        print("\n📝 Next steps:")
+        print("1. Review files in marp_slides/")
+        print("2. Run: ./scripts/marp_tools.sh convert")
+        print("3. Or use: ./scripts/marp_tools.sh watch")
         
         return 0
         

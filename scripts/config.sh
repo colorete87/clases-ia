@@ -1,14 +1,14 @@
 #!/bin/bash
 
-# Archivo de configuración para scripts de Marp
-# Reutilizable para diferentes proyectos/temas
-# Autor: Asistente IA
+# Configuration file for Marp scripts
+# Reusable for different projects/themes
+# Author: AI Assistant
 
 # =============================================================================
-# CONFIGURACIÓN POR DEFECTO
+# DEFAULT CONFIGURATION
 # =============================================================================
 
-# Estructura de directorios por defecto
+# Default directory structure
 DEFAULT_MD_SRC_DIR="presentation/md_src"
 DEFAULT_MARP_SLIDES_DIR="presentation/marp_slides"
 DEFAULT_PDF_SLIDES_DIR="presentation/pdf_slides"
@@ -16,149 +16,149 @@ DEFAULT_IMG_SRC_DIR="presentation/img_src"
 DEFAULT_STYLE_CSS="presentation/style.css"
 DEFAULT_PROGRAMA="program.md"
 
-# Directorios por defecto (para compatibilidad)
+# Default directories (for compatibility)
 DEFAULT_INPUT_DIR="$DEFAULT_MARP_SLIDES_DIR"
 DEFAULT_OUTPUT_DIR="$DEFAULT_PDF_SLIDES_DIR"
 DEFAULT_THEME=""
 
-# Configuración de Marp
+# Marp configuration
 MARP_OPTIONS="--pdf"
 MARP_HTML_OPTIONS="--html"
 MARP_PPTX_OPTIONS="--pptx"
 
-# Configuración de logos y fondo
+# Logo and background configuration
 DEFAULT_LOGO_LEFT=""
 DEFAULT_LOGO_RIGHT=""
 DEFAULT_BACKGROUND=""
 
-# Configuración de header y footer
+# Header and footer configuration
 DEFAULT_HEADER_TEXT=""
 DEFAULT_FOOTER_TEXT=""
 
-# Configuración de Python
+# Python configuration
 PYTHON_CMD="python3"
 
-# Configuración de Node.js
+# Node.js configuration
 NPM_CMD="npm"
 MARP_PACKAGE="@marp-team/marp-cli"
 
 # =============================================================================
-# CONFIGURACIÓN ESPECÍFICA DEL PROYECTO
+# PROJECT-SPECIFIC CONFIGURATION
 # =============================================================================
 
-# Puedes sobrescribir las configuraciones por defecto aquí
-# Ejemplo:
-# DEFAULT_INPUT_DIR="presentaciones"
+# You can override the default configurations here
+# Example:
+# DEFAULT_INPUT_DIR="presentations"
 # DEFAULT_OUTPUT_DIR="pdfs"
 # DEFAULT_THEME="custom-theme"
 
 # =============================================================================
-# FUNCIONES DE UTILIDAD
+# UTILITY FUNCTIONS
 # =============================================================================
 
-# Función para cargar configuración desde archivo
+# Function to load configuration from file
 load_config() {
     local config_file="$1"
     
     if [ -f "$config_file" ]; then
-        echo "📁 Cargando configuración desde: $config_file"
+        echo "📁 Loading configuration from: $config_file"
         source "$config_file"
     else
-        echo "⚠️  Archivo de configuración no encontrado: $config_file"
-        echo "   Usando configuración por defecto"
+        echo "⚠️  Configuration file not found: $config_file"
+        echo "   Using default configuration"
     fi
 }
 
-# Función para mostrar configuración actual
+# Function to show current configuration
 show_config() {
-    echo "📋 Configuración actual:"
-    echo "   Estructura de directorios:"
-    echo "     - MD fuente: $DEFAULT_MD_SRC_DIR"
+    echo "📋 Current configuration:"
+    echo "   Directory structure:"
+    echo "     - MD source: $DEFAULT_MD_SRC_DIR"
     echo "     - Marp slides: $DEFAULT_MARP_SLIDES_DIR"
     echo "     - PDF slides: $DEFAULT_PDF_SLIDES_DIR"
-    echo "     - Imágenes: $DEFAULT_IMG_SRC_DIR"
-    echo "     - Estilos CSS: $DEFAULT_STYLE_CSS"
-    echo "     - Programa: $DEFAULT_PROGRAMA"
-    echo "   Tema: ${DEFAULT_THEME:-por defecto}"
-    echo "   Comando Python: $PYTHON_CMD"
-    echo "   Comando npm: $NPM_CMD"
-    echo "   Paquete Marp: $MARP_PACKAGE"
+    echo "     - Images: $DEFAULT_IMG_SRC_DIR"
+    echo "     - CSS styles: $DEFAULT_STYLE_CSS"
+    echo "     - Program: $DEFAULT_PROGRAMA"
+    echo "   Theme: ${DEFAULT_THEME:-default}"
+    echo "   Python command: $PYTHON_CMD"
+    echo "   npm command: $NPM_CMD"
+    echo "   Marp package: $MARP_PACKAGE"
     echo ""
 }
 
-# Función para validar configuración
+# Function to validate configuration
 validate_config() {
     local errors=0
     
-    # Verificar que Python esté disponible
+    # Check if Python is available
     if ! command -v "$PYTHON_CMD" &> /dev/null; then
-        echo "❌ Error: $PYTHON_CMD no está disponible"
+        echo "❌ Error: $PYTHON_CMD is not available"
         errors=$((errors + 1))
     fi
     
-    # Verificar que npm esté disponible
+    # Check if npm is available
     if ! command -v "$NPM_CMD" &> /dev/null; then
-        echo "❌ Error: $NPM_CMD no está disponible"
+        echo "❌ Error: $NPM_CMD is not available"
         errors=$((errors + 1))
     fi
     
-    # Verificar que Marp esté instalado
+    # Check if Marp is installed
     if ! command -v marp &> /dev/null; then
-        echo "⚠️  Advertencia: Marp CLI no está instalado"
-        echo "   Ejecuta: ./scripts/setup_marp.sh"
+        echo "⚠️  Warning: Marp CLI is not installed"
+        echo "   Run: ./scripts/setup_marp.sh"
     fi
     
     if [ $errors -gt 0 ]; then
-        echo "❌ Se encontraron $errors errores en la configuración"
+        echo "❌ Found $errors errors in configuration"
         return 1
     else
-        echo "✅ Configuración válida"
+        echo "✅ Configuration is valid"
         return 0
     fi
 }
 
-# Función para crear archivo de configuración de ejemplo
+# Function to create example configuration file
 create_example_config() {
     local example_file="$1"
     
     cat > "$example_file" << 'EOF'
 #!/bin/bash
 
-# Archivo de configuración de ejemplo para scripts de Marp
-# Copia este archivo y modifica según tus necesidades
+# Example configuration file for Marp scripts
+# Copy this file and modify according to your needs
 
-# Directorios personalizados
-DEFAULT_INPUT_DIR="mis_presentaciones"
-DEFAULT_OUTPUT_DIR="mis_pdfs"
-DEFAULT_THEME="mi_tema_personalizado"
+# Custom directories
+DEFAULT_INPUT_DIR="my_presentations"
+DEFAULT_OUTPUT_DIR="my_pdfs"
+DEFAULT_THEME="my_custom_theme"
 
-# Opciones adicionales de Marp
+# Additional Marp options
 MARP_OPTIONS="--pdf --allow-local-files"
 MARP_HTML_OPTIONS="--html --allow-local-files"
 MARP_PPTX_OPTIONS="--pptx --allow-local-files"
 
-# Configuración de Python (si usas un entorno virtual)
+# Python configuration (if using virtual environment)
 # PYTHON_CMD="/path/to/venv/bin/python"
 
-# Configuración de Node.js (si usas nvm o similar)
+# Node.js configuration (if using nvm or similar)
 # NPM_CMD="/path/to/npm"
 # MARP_PACKAGE="@marp-team/marp-cli"
 EOF
 
-    echo "📝 Archivo de configuración de ejemplo creado: $example_file"
-    echo "   Edita el archivo según tus necesidades"
+    echo "📝 Example configuration file created: $example_file"
+    echo "   Edit the file according to your needs"
 }
 
 # =============================================================================
-# CONFIGURACIÓN AUTOMÁTICA
+# AUTOMATIC CONFIGURATION
 # =============================================================================
 
-# Buscar archivo de configuración del proyecto
+# Search for project configuration file
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 
-# Cargar configuración del proyecto si existe
-# Prioridad: 1) tema theme-example, 2) proyecto raíz
+# Load project configuration if it exists
+# Priority: 1) theme-example theme, 2) project root
 if [ -f "$PROJECT_DIR/themes/theme-example/marp.config.sh" ]; then
     PROJECT_CONFIG="$PROJECT_DIR/themes/theme-example/marp.config.sh"
 elif [ -f "$PROJECT_DIR/marp.config.sh" ]; then
@@ -168,19 +168,19 @@ else
 fi
 load_config "$PROJECT_CONFIG"
 
-# Mostrar configuración si se solicita
+# Show configuration if requested
 if [ "${1:-}" = "--show-config" ]; then
     show_config
     exit 0
 fi
 
-# Validar configuración si se solicita
+# Validate configuration if requested
 if [ "${1:-}" = "--validate" ]; then
     validate_config
     exit $?
 fi
 
-# Crear archivo de ejemplo si se solicita
+# Create example file if requested
 if [ "${1:-}" = "--create-example" ]; then
     create_example_config "$PROJECT_DIR/marp.config.example.sh"
     exit 0

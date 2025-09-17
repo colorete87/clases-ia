@@ -1,37 +1,37 @@
 #!/bin/bash
 
-# Script para convertir archivos Marp a PDF
-# Reutilizable para diferentes proyectos/temas
-# Autor: Asistente IA
-# Fecha: $(date)
+# Script to convert Marp files to PDF
+# Reusable for different projects/themes
+# Author: AI Assistant
+# Date: $(date)
 
-# Configuración por defecto
+# Default configuration
 PROJECT_DIR=""
 INPUT_DIR="presentation/marp_slides"
 OUTPUT_DIR="presentation/pdf_slides"
 THEME=""
 VERBOSE=false
 
-# Función de ayuda
+# Help function
 show_help() {
-    echo "Uso: $0 [OPCIONES]"
+    echo "Usage: $0 [OPTIONS]"
     echo ""
-    echo "Opciones:"
-    echo "  -p, --project-dir DIR    Directorio del proyecto (default: directorio padre)"
-    echo "  -i, --input DIR          Directorio con archivos Marp (default: presentation/marp_slides)"
-    echo "  -o, --output DIR         Directorio de salida para PDFs (default: presentation/pdf_slides)"
-    echo "  -t, --theme THEME        Tema CSS a usar (archivo .css en scripts/)"
-    echo "  -v, --verbose            Modo verboso"
-    echo "  -h, --help               Mostrar esta ayuda"
+    echo "Options:"
+    echo "  -p, --project-dir DIR    Project directory (default: parent directory)"
+    echo "  -i, --input DIR          Directory with Marp files (default: presentation/marp_slides)"
+    echo "  -o, --output DIR         Output directory for PDFs (default: presentation/pdf_slides)"
+    echo "  -t, --theme THEME        CSS theme to use (.css file in scripts/)"
+    echo "  -v, --verbose            Verbose mode"
+    echo "  -h, --help               Show this help"
     echo ""
-    echo "Ejemplos:"
-    echo "  $0                                    # Usar configuración por defecto"
-    echo "  $0 -p /path/to/project               # Especificar directorio del proyecto"
-    echo "  $0 -i slides -o output -t custom     # Directorios y tema personalizados"
+    echo "Examples:"
+    echo "  $0                                    # Use default configuration"
+    echo "  $0 -p /path/to/project               # Specify project directory"
+    echo "  $0 -i slides -o output -t custom     # Custom directories and theme"
     echo ""
 }
 
-# Procesar argumentos
+# Process arguments
 while [[ $# -gt 0 ]]; do
     case $1 in
         -p|--project-dir)
@@ -59,63 +59,63 @@ while [[ $# -gt 0 ]]; do
             exit 0
             ;;
         *)
-            echo "❌ Opción desconocida: $1"
+            echo "❌ Unknown option: $1"
             show_help
             exit 1
             ;;
     esac
 done
 
-# Determinar directorio del proyecto
+# Determine project directory
 if [ -z "$PROJECT_DIR" ]; then
     SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
     PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 fi
 
-# Verificar que el directorio del proyecto existe
+# Verify that project directory exists
 if [ ! -d "$PROJECT_DIR" ]; then
-    echo "❌ Error: El directorio del proyecto '$PROJECT_DIR' no existe"
+    echo "❌ Error: Project directory '$PROJECT_DIR' does not exist"
     exit 1
 fi
 
-# Guardar la ruta del script
+# Save script path
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# No cambiar al directorio del proyecto, trabajar desde el directorio raíz
+# Don't change to project directory, work from root directory
 
 if [ "$VERBOSE" = true ]; then
-    echo "📁 Directorio del proyecto: $PROJECT_DIR"
-    echo "📁 Directorio de entrada: $INPUT_DIR"
-    echo "📁 Directorio de salida: $OUTPUT_DIR"
-    echo "🎨 Tema: ${THEME:-por defecto}"
+    echo "📁 Project directory: $PROJECT_DIR"
+    echo "📁 Input directory: $INPUT_DIR"
+    echo "📁 Output directory: $OUTPUT_DIR"
+    echo "🎨 Theme: ${THEME:-default}"
     echo ""
 fi
 
-echo "🚀 Iniciando conversión de archivos Marp a PDF..."
+echo "🚀 Starting conversion of Marp files to PDF..."
 echo ""
 
-# Verificar que Marp está instalado
+# Verify that Marp is installed
 if ! command -v marp &> /dev/null; then
-    echo "❌ Marp no está instalado. Ejecutando setup..."
+    echo "❌ Marp is not installed. Running setup..."
     bash "$(dirname "${BASH_SOURCE[0]}")/setup_marp.sh"
     echo ""
 fi
 
-# Crear directorios si no existen
-echo "📁 Creando directorios necesarios..."
+# Create directories if they don't exist
+echo "📁 Creating necessary directories..."
 mkdir -p "$PROJECT_DIR/$INPUT_DIR" "$PROJECT_DIR/$OUTPUT_DIR"
 
-# Verificar que existen archivos Marp
+# Verify that Marp files exist
 if [ ! -d "$PROJECT_DIR/$INPUT_DIR" ] || [ -z "$(ls -A "$PROJECT_DIR/$INPUT_DIR"/*.md 2>/dev/null)" ]; then
-    echo "❌ No se encontraron archivos Marp en $PROJECT_DIR/$INPUT_DIR/"
-    echo "   Asegúrate de que los archivos .md estén en $PROJECT_DIR/$INPUT_DIR/"
+    echo "❌ No Marp files found in $PROJECT_DIR/$INPUT_DIR/"
+    echo "   Make sure .md files are in $PROJECT_DIR/$INPUT_DIR/"
     exit 1
 fi
 
-# Convertir archivos Marp a PDF
-echo "🔄 Convirtiendo archivos Marp a PDF..."
+# Convert Marp files to PDF
+echo "🔄 Converting Marp files to PDF..."
 
-# Construir comando con rutas absolutas
+# Build command with absolute paths
 CMD="python3 $SCRIPT_DIR/convert_marp_to_pdf.py"
 CMD="$CMD --project-dir '$PROJECT_DIR'"
 CMD="$CMD '$INPUT_DIR'"
@@ -125,23 +125,23 @@ if [ -n "$THEME" ]; then
     CMD="$CMD -t '$THEME'"
 fi
 
-# Ejecutar comando
-echo "🔄 Ejecutando: $CMD"
+# Execute command
+echo "🔄 Executing: $CMD"
 eval $CMD
 
 if [ $? -eq 0 ]; then
     echo ""
-    echo "🎉 ¡Conversión completada!"
+    echo "🎉 Conversion completed!"
     echo ""
-    echo "📁 Archivos generados:"
-    echo "   - $INPUT_DIR/: Archivos Marp (entrada)"
-    echo "   - $OUTPUT_DIR/: Archivos PDF generados"
+    echo "📁 Generated files:"
+    echo "   - $INPUT_DIR/: Marp files (input)"
+    echo "   - $OUTPUT_DIR/: Generated PDF files"
     echo ""
-    echo "📝 Para ver las presentaciones:"
-    echo "   - Abre los archivos .pdf en $OUTPUT_DIR/"
-    echo "   - O usa: marp $INPUT_DIR/archivo.md --watch"
+    echo "📝 To view presentations:"
+    echo "   - Open .pdf files in $OUTPUT_DIR/"
+    echo "   - Or use: marp $INPUT_DIR/file.md --watch"
     echo ""
 else
-    echo "❌ Error durante la conversión"
+    echo "❌ Error during conversion"
     exit 1
 fi

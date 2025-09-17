@@ -1,70 +1,70 @@
 #!/bin/bash
 
-# Herramientas principales para Marp
-# Script unificado para todas las operaciones de Marp
-# Reutilizable para diferentes proyectos/temas
-# Autor: Asistente IA
+# Main tools for Marp
+# Unified script for all Marp operations
+# Reusable for different projects/themes
+# Author: AI Assistant
 
-# Cargar configuración
+# Load configuration
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/config.sh"
 
-# Configuración
+# Configuration
 VERBOSE=false
 DRY_RUN=false
 
-# Función de ayuda
+# Help function
 show_help() {
-    echo "Herramientas de Marp - Script unificado"
+    echo "Marp Tools - Unified script"
     echo ""
-    echo "Uso: $0 COMANDO [OPCIONES]"
+    echo "Usage: $0 COMMAND [OPTIONS]"
     echo ""
-    echo "Comandos:"
-    echo "  setup                    Instalar Marp CLI"
-    echo "  md-to-marp               Convertir archivos MD a formato Marp"
-    echo "  convert                  Convertir archivos Marp a PDF"
-    echo "  convert-program          Convertir program.md directamente a PDF"
-    echo "  convert-html             Convertir archivos Marp a HTML"
-    echo "  convert-pptx             Convertir archivos Marp a PowerPoint"
-    echo "  watch                    Modo watch (auto-regenera)"
-    echo "  all                      Convertir MD a Marp y luego a PDF"
-    echo "  config                   Mostrar configuración actual"
-    echo "  validate                 Validar configuración"
-    echo "  create-example           Crear archivo de configuración de ejemplo"
+    echo "Commands:"
+    echo "  setup                    Install Marp CLI"
+    echo "  md-to-marp               Convert MD files to Marp format"
+    echo "  convert                  Convert Marp files to PDF"
+    echo "  convert-program          Convert program.md directly to PDF"
+    echo "  convert-html             Convert Marp files to HTML"
+    echo "  convert-pptx             Convert Marp files to PowerPoint"
+    echo "  watch                    Watch mode (auto-regenerate)"
+    echo "  all                      Convert MD to Marp then to PDF"
+    echo "  config                   Show current configuration"
+    echo "  validate                 Validate configuration"
+    echo "  create-example           Create example configuration file"
     echo ""
-    echo "Opciones globales:"
-    echo "  -v, --verbose            Modo verboso"
-    echo "  -d, --dry-run            Mostrar comandos sin ejecutar"
-    echo "  -h, --help               Mostrar esta ayuda"
+    echo "Global options:"
+    echo "  -v, --verbose            Verbose mode"
+    echo "  -d, --dry-run            Show commands without executing"
+    echo "  -h, --help               Show this help"
     echo ""
-    echo "Opciones de conversión:"
-    echo "  -i, --input DIR          Directorio de entrada (default: $DEFAULT_INPUT_DIR)"
-    echo "  -o, --output DIR         Directorio de salida (default: $DEFAULT_OUTPUT_DIR)"
-    echo "  -t, --theme THEME        Tema CSS a usar"
-    echo "  --logo-left PATH         Ruta al logo izquierdo (upper-left)"
-    echo "  --logo-right PATH        Ruta al logo derecho (upper-right)"
-    echo "  --background PATH        Ruta a la imagen de fondo"
-    echo "  --header TEXT            Texto del header (parte superior)"
-    echo "  --footer TEXT            Texto del footer (parte inferior)"
-    echo "  -p, --project-dir DIR    Directorio del proyecto"
+    echo "Conversion options:"
+    echo "  -i, --input DIR          Input directory (default: $DEFAULT_INPUT_DIR)"
+    echo "  -o, --output DIR         Output directory (default: $DEFAULT_OUTPUT_DIR)"
+    echo "  -t, --theme THEME        CSS theme to use"
+    echo "  --logo-left PATH         Path to left logo (upper-left)"
+    echo "  --logo-right PATH        Path to right logo (upper-right)"
+    echo "  --background PATH        Path to background image"
+    echo "  --header TEXT            Header text (top part)"
+    echo "  --footer TEXT            Footer text (bottom part)"
+    echo "  -p, --project-dir DIR    Project directory"
     echo ""
-    echo "Ejemplos:"
-    echo "  $0 setup                              # Instalar Marp"
-    echo "  $0 convert                            # Convertir a PDF"
-    echo "  $0 convert -i slides -o pdfs          # Directorios personalizados"
-    echo "  $0 convert-html -t custom-theme       # Convertir a HTML con tema"
+    echo "Examples:"
+    echo "  $0 setup                              # Install Marp"
+    echo "  $0 convert                            # Convert to PDF"
+    echo "  $0 convert -i slides -o pdfs          # Custom directories"
+    echo "  $0 convert-html -t custom-theme       # Convert to HTML with theme"
     echo "  $0 md-to-marp --logo-left logo1.png --logo-right logo2.png --background bg.jpg --header 'My Company' --footer 'Confidential'"
-    echo "  $0 watch -i slides                    # Modo watch"
+    echo "  $0 watch -i slides                    # Watch mode"
     echo ""
 }
 
-# Función para ejecutar comando con opciones
+# Function to execute command with options
 run_command() {
     local cmd="$1"
     shift
     
     if [ "$VERBOSE" = true ]; then
-        echo "🔧 Ejecutando: $cmd $*"
+        echo "🔧 Executing: $cmd $*"
     fi
     
     if [ "$DRY_RUN" = true ]; then
@@ -76,17 +76,17 @@ run_command() {
     return $?
 }
 
-# Función para setup
+# Function for setup
 cmd_setup() {
-    echo "🚀 Configurando Marp..."
+    echo "🚀 Setting up Marp..."
     run_command "bash $SCRIPT_DIR/setup_marp.sh" "$@"
 }
 
-# Función para convertir MD a Marp
+# Function to convert MD to Marp
 cmd_md_to_marp() {
-    echo "📝 Convirtiendo archivos Markdown a formato Marp..."
+    echo "📝 Converting Markdown files to Marp format..."
     
-    # Procesar argumentos específicos
+    # Process specific arguments
     local md_src="$DEFAULT_MD_SRC_DIR"
     local marp_slides="$DEFAULT_MARP_SLIDES_DIR"
     local theme="$DEFAULT_THEME"
@@ -157,7 +157,7 @@ cmd_md_to_marp() {
         esac
     done
     
-    # Construir comando
+    # Build command
     local cmd="python3 $SCRIPT_DIR/convert_md_to_marp.py"
     cmd="$cmd '$md_src'"
     cmd="$cmd -o '$marp_slides'"
@@ -201,11 +201,11 @@ cmd_md_to_marp() {
     run_command "$cmd"
 }
 
-# Función para convertir a PDF
+# Function to convert to PDF
 cmd_convert() {
-    echo "🔄 Convirtiendo archivos Marp a PDF..."
+    echo "🔄 Converting Marp files to PDF..."
     
-    # Procesar argumentos específicos de convert
+    # Process specific convert arguments
     local convert_args=()
     while [[ $# -gt 0 ]]; do
         case $1 in
@@ -214,7 +214,7 @@ cmd_convert() {
                 shift
                 ;;
             -d|--dry-run)
-                # Convertir dry-run a verbose para run_conversion.sh
+                # Convert dry-run to verbose for run_conversion.sh
                 convert_args+=("-v")
                 shift
                 ;;
@@ -228,11 +228,11 @@ cmd_convert() {
     run_command "bash $SCRIPT_DIR/run_conversion.sh" "${convert_args[@]}"
 }
 
-# Función para convertir program.md directamente a PDF
+# Function to convert program.md directly to PDF
 cmd_convert_program() {
-    echo "📄 Convirtiendo program.md directamente a PDF..."
+    echo "📄 Converting program.md directly to PDF..."
     
-    # Procesar argumentos específicos
+    # Process specific arguments
     local project_dir=""
     local theme=""
     local verbose=false
@@ -257,22 +257,22 @@ cmd_convert_program() {
         esac
     done
     
-    # Si no se especifica project_dir, usar el directorio actual
+    # If project_dir is not specified, use current directory
     if [ -z "$project_dir" ]; then
         project_dir="."
     fi
     
-    # Buscar program.md en el directorio del proyecto
+    # Look for program.md in project directory
     local program_file="$project_dir/program.md"
     
     if [ ! -f "$program_file" ]; then
-        echo "❌ No se encontró program.md en $project_dir"
+        echo "❌ program.md not found in $project_dir"
         return 1
     fi
     
-    echo "📄 Encontrado: $program_file"
+    echo "📄 Found: $program_file"
     
-    # Crear comando marp con tema A4
+    # Create marp command with A4 theme
     local a4_theme="$SCRIPT_DIR/a4-theme.css"
     local cmd="marp '$program_file' --pdf --output '$project_dir/program.pdf' --allow-local-files --theme '$a4_theme'"
     
@@ -280,26 +280,26 @@ cmd_convert_program() {
         cmd="$cmd --verbose"
     fi
     
-    # Ejecutar conversión
-    echo "🔄 Ejecutando: $cmd"
+    # Execute conversion
+    echo "🔄 Executing: $cmd"
     eval $cmd
     
     if [ $? -eq 0 ]; then
-        echo "✅ program.pdf generado exitosamente en $project_dir/"
+        echo "✅ program.pdf generated successfully in $project_dir/"
     else
-        echo "❌ Error al convertir program.md a PDF"
+        echo "❌ Error converting program.md to PDF"
         return 1
     fi
 }
 
-# Función para convertir a HTML
+# Function to convert to HTML
 cmd_convert_html() {
     local input_dir="$DEFAULT_INPUT_DIR"
     local output_dir="$DEFAULT_OUTPUT_DIR"
     local theme="$DEFAULT_THEME"
     local project_dir=""
     
-    # Procesar argumentos
+    # Process arguments
     while [[ $# -gt 0 ]]; do
         case $1 in
             -i|--input)
@@ -324,15 +324,15 @@ cmd_convert_html() {
         esac
     done
     
-    # Resolver directorio del proyecto
+    # Resolve project directory
     if [ -z "$project_dir" ]; then
         project_dir="$(dirname "$SCRIPT_DIR")"
     fi
     
-    # Crear directorio de salida
+    # Create output directory
     mkdir -p "$project_dir/$output_dir"
     
-    # Convertir archivos
+    # Convert files
     for file in "$project_dir/$input_dir"/*.md; do
         if [ -f "$file" ]; then
             local basename=$(basename "$file" .md)
@@ -351,13 +351,13 @@ cmd_convert_html() {
     done
 }
 
-# Función para convertir a PowerPoint
+# Function to convert to PowerPoint
 cmd_convert_pptx() {
     local input_dir="$DEFAULT_INPUT_DIR"
     local output_dir="$DEFAULT_OUTPUT_DIR"
     local project_dir=""
     
-    # Procesar argumentos
+    # Process arguments
     while [[ $# -gt 0 ]]; do
         case $1 in
             -i|--input)
@@ -378,15 +378,15 @@ cmd_convert_pptx() {
         esac
     done
     
-    # Resolver directorio del proyecto
+    # Resolve project directory
     if [ -z "$project_dir" ]; then
         project_dir="$(dirname "$SCRIPT_DIR")"
     fi
     
-    # Crear directorio de salida
+    # Create output directory
     mkdir -p "$project_dir/$output_dir"
     
-    # Convertir archivos
+    # Convert files
     for file in "$project_dir/$input_dir"/*.md; do
         if [ -f "$file" ]; then
             local basename=$(basename "$file" .md)
@@ -397,7 +397,7 @@ cmd_convert_pptx() {
     done
 }
 
-# Función para modo watch
+# Function for watch mode
 cmd_watch() {
     local input_dir="$DEFAULT_INPUT_DIR"
     local project_dir=""
@@ -419,48 +419,48 @@ cmd_watch() {
         esac
     done
     
-    # Resolver directorio del proyecto
+    # Resolve project directory
     if [ -z "$project_dir" ]; then
         project_dir="$(dirname "$SCRIPT_DIR")"
     fi
     
-    echo "👀 Iniciando modo watch en $project_dir/$input_dir"
-    echo "   Presiona Ctrl+C para salir"
+    echo "👀 Starting watch mode in $project_dir/$input_dir"
+    echo "   Press Ctrl+C to exit"
     echo ""
     
     run_command "marp $project_dir/$input_dir --watch"
 }
 
-# Función para convertir todo (MD -> Marp -> PDF)
+# Function to convert everything (MD -> Marp -> PDF)
 cmd_all() {
-    echo "🔄 Convirtiendo todo: MD -> Marp -> PDF + program.md -> PDF..."
+    echo "🔄 Converting everything: MD -> Marp -> PDF + program.md -> PDF..."
     
-    # Paso 1: Convertir archivos de md_src/ a Marp y luego a PDF
-    echo "📝 Paso 1: Convirtiendo archivos de md_src/ (MD -> Marp -> PDF)..."
+    # Step 1: Convert files from md_src/ to Marp then to PDF
+    echo "📝 Step 1: Converting files from md_src/ (MD -> Marp -> PDF)..."
     cmd_md_to_marp "$@"
     
     if [ $? -eq 0 ]; then
         echo ""
-        echo "🔄 Paso 2: Convirtiendo archivos Marp a PDF..."
+        echo "🔄 Step 2: Converting Marp files to PDF..."
         cmd_convert "$@"
         
         if [ $? -eq 0 ]; then
             echo ""
-            echo "📄 Paso 3: Convirtiendo program.md directamente a PDF..."
+            echo "📄 Step 3: Converting program.md directly to PDF..."
             cmd_convert_program "$@"
         else
-            echo "❌ Error en la conversión Marp a PDF"
+            echo "❌ Error in Marp to PDF conversion"
             return 1
         fi
     else
-        echo "❌ Error en la conversión MD a Marp"
+        echo "❌ Error in MD to Marp conversion"
         return 1
     fi
 }
 
-# Función principal
+# Main function
 main() {
-    # Procesar argumentos globales
+    # Process global arguments
     while [[ $# -gt 0 ]]; do
         case $1 in
             -v|--verbose)
@@ -479,16 +479,16 @@ main() {
                 break
                 ;;
             *)
-                echo "❌ Comando desconocido: $1"
+                echo "❌ Unknown command: $1"
                 show_help
                 exit 1
                 ;;
         esac
     done
     
-    # Verificar que se proporcionó un comando
+    # Verify that a command was provided
     if [ $# -eq 0 ]; then
-        echo "❌ Error: Se requiere un comando"
+        echo "❌ Error: A command is required"
         show_help
         exit 1
     fi
@@ -496,7 +496,7 @@ main() {
     local command="$1"
     shift
     
-    # Ejecutar comando correspondiente
+    # Execute corresponding command
     case $command in
         setup)
             cmd_setup "$@"
@@ -532,12 +532,12 @@ main() {
             create_example_config "$(dirname "$SCRIPT_DIR")/marp.config.example.sh"
             ;;
         *)
-            echo "❌ Comando desconocido: $command"
+            echo "❌ Unknown command: $command"
             show_help
             exit 1
             ;;
     esac
 }
 
-# Ejecutar función principal
+# Execute main function
 main "$@"

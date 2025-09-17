@@ -2,7 +2,7 @@
 # Facilitates the use of presentation conversion scripts
 
 # Default configuration
-THEME ?= theme-example
+THEME ?= example
 VERBOSE ?= false
 FORCE ?= false
 
@@ -15,8 +15,8 @@ IMG_SRC_DIR = $(THEME_DIR)/presentation/img_src
 LOGO_LEFT ?= $(IMG_SRC_DIR)/logo_left.png
 LOGO_RIGHT ?= $(IMG_SRC_DIR)/logo_right.png
 BACKGROUND ?= $(IMG_SRC_DIR)/background.png
-HEADER_TEXT ?= "Mi Empresa - Curso de Capacitación"
-FOOTER_TEXT ?= "Confidencial - Todos los derechos reservados"
+HEADER_TEXT ?= "My Company - Training Course"
+FOOTER_TEXT ?= "Confidential - All rights reserved"
 
 .PHONY: help setup install clean all convert md-to-marp watch config validate create-project default-logos show-config custom
 
@@ -30,14 +30,14 @@ help: ## Show this help
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  %-15s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 	@echo ""
 	@echo "Variables:"
-	@echo "  THEME           Theme/project to use (default: theme-example)"
+	@echo "  THEME           Theme/project to use (default: example)"
 	@echo "  VERBOSE         Verbose mode (default: false)"
 	@echo "  FORCE           Force mode - skip all confirmations (default: false)"
 	@echo "  LOGO_LEFT       Left logo path (default: $(IMG_SRC_DIR)/logo_left.png)"
 	@echo "  LOGO_RIGHT      Right logo path (default: $(IMG_SRC_DIR)/logo_right.png)"
 	@echo "  BACKGROUND      Background image path (default: $(IMG_SRC_DIR)/background.png)"
-	@echo "  HEADER_TEXT     Header text (default: Mi Empresa - Curso de Capacitación)"
-	@echo "  FOOTER_TEXT     Footer text (default: Confidencial - Todos los derechos reservados)"
+	@echo "  HEADER_TEXT     Header text (default: My Company - Training Course)"
+	@echo "  FOOTER_TEXT     Footer text (default: Confidential - All rights reserved)"
 	@echo ""
 	@echo "Examples:"
 	@echo "  make setup                    # Install Marp CLI"

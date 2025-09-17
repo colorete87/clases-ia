@@ -1,32 +1,32 @@
 #!/bin/bash
 
-# Script para crear un nuevo proyecto con la estructura recomendada
-# Autor: Asistente IA
+# Script to create a new project with the recommended structure
+# Author: AI Assistant
 
-# Configuración
+# Configuration
 VERBOSE=false
 THEME_NAME=""
 
-# Función de ayuda
+# Help function
 show_help() {
-    echo "Uso: $0 NOMBRE_TEMA [OPCIONES]"
+    echo "Usage: $0 THEME_NAME [OPTIONS]"
     echo ""
-    echo "Crea un nuevo proyecto con la estructura recomendada para presentaciones Marp"
+    echo "Creates a new project with the recommended structure for Marp presentations"
     echo ""
-    echo "Argumentos:"
-    echo "  NOMBRE_TEMA              Nombre del tema/proyecto"
+    echo "Arguments:"
+    echo "  THEME_NAME               Name of the theme/project"
     echo ""
-    echo "Opciones:"
-    echo "  -v, --verbose            Modo verboso"
-    echo "  -h, --help               Mostrar esta ayuda"
+    echo "Options:"
+    echo "  -v, --verbose            Verbose mode"
+    echo "  -h, --help               Show this help"
     echo ""
-    echo "Ejemplos:"
-    echo "  $0 mi-curso-ia           # Crear proyecto 'mi-curso-ia'"
-    echo "  $0 machine-learning -v   # Crear proyecto con modo verboso"
+    echo "Examples:"
+    echo "  $0 my-ai-course          # Create project 'my-ai-course'"
+    echo "  $0 machine-learning -v   # Create project with verbose mode"
     echo ""
 }
 
-# Procesar argumentos
+# Process arguments
 while [[ $# -gt 0 ]]; do
     case $1 in
         -v|--verbose)
@@ -38,7 +38,7 @@ while [[ $# -gt 0 ]]; do
             exit 0
             ;;
         -*)
-            echo "❌ Opción desconocida: $1"
+            echo "❌ Unknown option: $1"
             show_help
             exit 1
             ;;
@@ -46,7 +46,7 @@ while [[ $# -gt 0 ]]; do
             if [ -z "$THEME_NAME" ]; then
                 THEME_NAME="$1"
             else
-                echo "❌ Solo se puede especificar un nombre de tema"
+                echo "❌ Only one theme name can be specified"
                 show_help
                 exit 1
             fi
@@ -55,21 +55,21 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# Verificar que se proporcionó el nombre del tema
+# Verify that theme name was provided
 if [ -z "$THEME_NAME" ]; then
-    echo "❌ Error: Se requiere el nombre del tema"
+    echo "❌ Error: Theme name is required"
     show_help
     exit 1
 fi
 
-# Obtener directorio del script
+# Get script directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-echo "🚀 Creando proyecto: $THEME_NAME"
+echo "🚀 Creating project: $THEME_NAME"
 
-# Crear estructura de directorios
+# Create directory structure
 if [ "$VERBOSE" = true ]; then
-    echo "📁 Creando estructura de directorios..."
+    echo "📁 Creating directory structure..."
 fi
 
 mkdir -p "$THEME_NAME/presentation/md_src"
@@ -77,48 +77,48 @@ mkdir -p "$THEME_NAME/presentation/marp_slides"
 mkdir -p "$THEME_NAME/presentation/pdf_slides"
 mkdir -p "$THEME_NAME/presentation/img_src"
 
-# Copiar scripts
+# Copy scripts
 if [ "$VERBOSE" = true ]; then
-    echo "📋 Copiando scripts..."
+    echo "📋 Copying scripts..."
 fi
 
 cp -r "$SCRIPT_DIR" "$THEME_NAME/"
 
-# Crear archivo programa.md
+# Create programa.md file
 if [ "$VERBOSE" = true ]; then
-    echo "📝 Creando archivo programa.md..."
+    echo "📝 Creating programa.md file..."
 fi
 
 cat > "$THEME_NAME/programa.md" << EOF
-# Programa del Curso: $THEME_NAME
+# Course Program: $THEME_NAME
 
-## Módulo 1: Introducción
-- Conceptos básicos
-- Herramientas necesarias
-- Configuración del entorno
+## Module 1: Introduction
+- Basic concepts
+- Necessary tools
+- Environment setup
 
-## Módulo 2: Desarrollo
-- Implementación paso a paso
-- Mejores prácticas
-- Casos de uso
+## Module 2: Development
+- Step-by-step implementation
+- Best practices
+- Use cases
 
-## Módulo 3: Práctica
-- Ejercicios prácticos
-- Proyecto final
-- Evaluación
+## Module 3: Practice
+- Practical exercises
+- Final project
+- Evaluation
 
 ---
 
-*Este archivo contiene el programa general del curso. Las presentaciones detalladas están en presentation/md_src/*
+*This file contains the general course program. Detailed presentations are in presentation/md_src/*
 EOF
 
-# Crear archivo de estilos CSS
+# Create CSS styles file
 if [ "$VERBOSE" = true ]; then
-    echo "🎨 Creando archivo de estilos..."
+    echo "🎨 Creating styles file..."
 fi
 
 cat > "$THEME_NAME/presentation/style.css" << 'EOF'
-/* Estilos personalizados para las presentaciones */
+/* Custom styles for presentations */
 
 section {
     font-family: 'Arial', sans-serif;
@@ -285,7 +285,7 @@ li {
     margin: 10px 0;
 }
 
-/* Separador de diapositivas */
+/* Slide separator */
 hr {
     border: none;
     height: 3px;
@@ -294,18 +294,18 @@ hr {
 }
 EOF
 
-# Crear archivo de configuración
+# Create configuration file
 if [ "$VERBOSE" = true ]; then
-    echo "⚙️  Creando archivo de configuración..."
+    echo "⚙️  Creating configuration file..."
 fi
 
 cat > "$THEME_NAME/marp.config.sh" << EOF
 #!/bin/bash
 
-# Archivo de configuración para $THEME_NAME
-# Modifica según tus necesidades
+# Configuration file for $THEME_NAME
+# Modify according to your needs
 
-# Directorios del proyecto
+# Project directories
 DEFAULT_MD_SRC_DIR="presentation/md_src"
 DEFAULT_MARP_SLIDES_DIR="presentation/marp_slides"
 DEFAULT_PDF_SLIDES_DIR="presentation/pdf_slides"
@@ -313,18 +313,18 @@ DEFAULT_IMG_SRC_DIR="presentation/img_src"
 DEFAULT_STYLE_CSS="presentation/style.css"
 DEFAULT_PROGRAMA="programa.md"
 
-# Configuración de logos y fondo
-# Descomenta y modifica las rutas según tus necesidades
-# DEFAULT_LOGO_LEFT="presentation/img_src/logo_izquierdo.png"
-# DEFAULT_LOGO_RIGHT="presentation/img_src/logo_derecho.png"
-# DEFAULT_BACKGROUND="presentation/img_src/fondo.jpg"
+# Logo and background configuration
+# Uncomment and modify paths according to your needs
+# DEFAULT_LOGO_LEFT="presentation/img_src/left_logo.png"
+# DEFAULT_LOGO_RIGHT="presentation/img_src/right_logo.png"
+# DEFAULT_BACKGROUND="presentation/img_src/background.jpg"
 
-# Configuración de header y footer
-# Descomenta y modifica los textos según tus necesidades
-# DEFAULT_HEADER_TEXT="Mi Empresa - Curso de Capacitación"
-# DEFAULT_FOOTER_TEXT="Confidencial - Todos los derechos reservados"
+# Header and footer configuration
+# Uncomment and modify texts according to your needs
+# DEFAULT_HEADER_TEXT="My Company - Training Course"
+# DEFAULT_FOOTER_TEXT="Confidential - All rights reserved"
 
-# Opciones de Marp
+# Marp options
 MARP_OPTIONS="--pdf --allow-local-files"
 MARP_HTML_OPTIONS="--html --allow-local-files"
 MARP_PPTX_OPTIONS="--pptx --allow-local-files"
@@ -339,40 +339,40 @@ EOF
 
 chmod +x "$THEME_NAME/marp.config.sh"
 
-# Crear archivo de ejemplo en md_src
+# Create example file in md_src
 if [ "$VERBOSE" = true ]; then
-    echo "📄 Creando archivo de ejemplo..."
+    echo "📄 Creating example file..."
 fi
 
 cat > "$THEME_NAME/presentation/md_src/introduccion.md" << EOF
-# Introducción a $THEME_NAME
+# Introduction to $THEME_NAME
 
-## ¿Qué aprenderemos?
+## What will we learn?
 
-- Conceptos fundamentales
-- Herramientas principales
-- Casos de uso reales
-
----
-
-## Objetivos del Curso
-
-1. **Comprender** los conceptos básicos
-2. **Aplicar** las herramientas en proyectos reales
-3. **Desarrollar** habilidades prácticas
+- Fundamental concepts
+- Main tools
+- Real use cases
 
 ---
 
-## Prerrequisitos
+## Course Objectives
 
-- Conocimientos básicos de programación
-- Experiencia con terminal/consola
-- Motivación para aprender
+1. **Understand** basic concepts
+2. **Apply** tools in real projects
+3. **Develop** practical skills
+
+---
+
+## Prerequisites
+
+- Basic programming knowledge
+- Terminal/console experience
+- Motivation to learn
 EOF
 
-# Crear archivo README para el proyecto
+# Create README file for the project
 if [ "$VERBOSE" = true ]; then
-    echo "📖 Creando README del proyecto..."
+    echo "📖 Creating project README..."
 fi
 
 cat > "$THEME_NAME/README.md" << EOF
@@ -451,26 +451,26 @@ Para más información, consulta \`scripts/README.md\`.
 EOF
 
 echo ""
-echo "🎉 ¡Proyecto creado exitosamente!"
+echo "🎉 Project created successfully!"
 echo ""
-echo "📁 Estructura creada:"
+echo "📁 Structure created:"
 echo "   $THEME_NAME/"
 echo "   ├── programa.md"
 echo "   ├── presentation/"
 echo "   │   ├── md_src/introduccion.md"
-echo "   │   ├── marp_slides/ (vacío)"
-echo "   │   ├── pdf_slides/ (vacío)"
-echo "   │   ├── img_src/ (vacío)"
+echo "   │   ├── marp_slides/ (empty)"
+echo "   │   ├── pdf_slides/ (empty)"
+echo "   │   ├── img_src/ (empty)"
 echo "   │   └── style.css"
-echo "   ├── scripts/ (copiados)"
+echo "   ├── scripts/ (copied)"
 echo "   └── README.md"
 echo ""
-echo "📝 Próximos pasos:"
+echo "📝 Next steps:"
 echo "   1. cd $THEME_NAME"
 echo "   2. ./scripts/setup_marp.sh"
 echo "   3. ./scripts/marp_tools.sh all"
-echo "   4. Edita los archivos en presentation/md_src/"
+echo "   4. Edit files in presentation/md_src/"
 echo ""
-echo "💡 Para ver las presentaciones:"
-echo "   - Abre los PDFs en presentation/pdf_slides/"
-echo "   - O usa: ./scripts/marp_tools.sh watch"
+echo "💡 To view presentations:"
+echo "   - Open PDFs in presentation/pdf_slides/"
+echo "   - Or use: ./scripts/marp_tools.sh watch"

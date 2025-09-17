@@ -1,28 +1,28 @@
 #!/bin/bash
 
-# Script para configurar Marp y convertir archivos Markdown a presentaciones
-# Reutilizable para diferentes proyectos/temas
-# Autor: Asistente IA
-# Fecha: $(date)
+# Script to configure Marp and convert Markdown files to presentations
+# Reusable for different projects/themes
+# Author: AI Assistant
+# Date: $(date)
 
-# Configuración
+# Configuration
 VERBOSE=false
 FORCE=false
 
-# Función de ayuda
+# Help function
 show_help() {
-    echo "Uso: $0 [OPCIONES]"
+    echo "Usage: $0 [OPTIONS]"
     echo ""
-    echo "Opciones:"
-    echo "  -v, --verbose    Modo verboso"
-    echo "  -f, --force      Forzar reinstalación de Marp CLI"
-    echo "  -h, --help       Mostrar esta ayuda"
+    echo "Options:"
+    echo "  -v, --verbose    Verbose mode"
+    echo "  -f, --force      Force Marp CLI reinstallation"
+    echo "  -h, --help       Show this help"
     echo ""
-    echo "Este script instala Marp CLI globalmente para convertir archivos Markdown a presentaciones."
+    echo "This script installs Marp CLI globally to convert Markdown files to presentations."
     echo ""
 }
 
-# Procesar argumentos
+# Process arguments
 while [[ $# -gt 0 ]]; do
     case $1 in
         -v|--verbose)
@@ -38,99 +38,99 @@ while [[ $# -gt 0 ]]; do
             exit 0
             ;;
         *)
-            echo "❌ Opción desconocida: $1"
+            echo "❌ Unknown option: $1"
             show_help
             exit 1
             ;;
     esac
 done
 
-echo "🚀 Configurando Marp para conversión de Markdown a presentaciones..."
+echo "🚀 Setting up Marp for Markdown to presentation conversion..."
 
-# Verificar si Node.js está instalado
+# Check if Node.js is installed
 if ! command -v node &> /dev/null; then
-    echo "❌ Node.js no está instalado. Por favor instala Node.js primero:"
+    echo "❌ Node.js is not installed. Please install Node.js first:"
     echo "   https://nodejs.org/"
     echo ""
-    echo "💡 En Ubuntu/Debian: sudo apt install nodejs npm"
-    echo "💡 En macOS: brew install node"
-    echo "💡 En Windows: Descarga desde https://nodejs.org/"
+    echo "💡 On Ubuntu/Debian: sudo apt install nodejs npm"
+    echo "💡 On macOS: brew install node"
+    echo "💡 On Windows: Download from https://nodejs.org/"
     exit 1
 fi
 
-# Verificar si npm está disponible
+# Check if npm is available
 if ! command -v npm &> /dev/null; then
-    echo "❌ npm no está disponible. Por favor instala npm primero."
+    echo "❌ npm is not available. Please install npm first."
     exit 1
 fi
 
 if [ "$VERBOSE" = true ]; then
-    echo "✅ Node.js versión: $(node --version)"
-    echo "✅ npm versión: $(npm --version)"
+    echo "✅ Node.js version: $(node --version)"
+    echo "✅ npm version: $(npm --version)"
 fi
 
-# Verificar si Marp ya está instalado
+# Check if Marp is already installed
 if command -v marp &> /dev/null && [ "$FORCE" = false ]; then
-    echo "✅ Marp CLI ya está instalado: $(marp --version)"
-    echo "💡 Usa -f o --force para reinstalar"
+    echo "✅ Marp CLI is already installed: $(marp --version)"
+    echo "💡 Use -f or --force to reinstall"
     echo ""
-    echo "🎉 ¡Marp está listo para usar!"
+    echo "🎉 Marp is ready to use!"
     show_usage_info
     exit 0
 fi
 
-# Instalar Marp CLI globalmente
-echo "📦 Instalando Marp CLI..."
+# Install Marp CLI globally
+echo "📦 Installing Marp CLI..."
 if [ "$FORCE" = true ]; then
-    echo "🔄 Reinstalando Marp CLI..."
+    echo "🔄 Reinstalling Marp CLI..."
     npm uninstall -g @marp-team/marp-cli 2>/dev/null || true
 fi
 
 npm install -g @marp-team/marp-cli
 
 if [ $? -eq 0 ]; then
-    echo "✅ Marp CLI instalado correctamente"
+    echo "✅ Marp CLI installed successfully"
 else
-    echo "❌ Error instalando Marp CLI"
-    echo "💡 Intenta ejecutar: sudo npm install -g @marp-team/marp-cli"
+    echo "❌ Error installing Marp CLI"
+    echo "💡 Try running: sudo npm install -g @marp-team/marp-cli"
     exit 1
 fi
 
-# Verificar instalación
-echo "🔍 Verificando instalación..."
+# Verify installation
+echo "🔍 Verifying installation..."
 marp --version
 
 if [ $? -eq 0 ]; then
     echo ""
-    echo "🎉 ¡Marp está listo para usar!"
+    echo "🎉 Marp is ready to use!"
     show_usage_info
 else
-    echo "❌ Error verificando la instalación de Marp"
+    echo "❌ Error verifying Marp installation"
     exit 1
 fi
 
-# Función para mostrar información de uso
+# Function to show usage information
 show_usage_info() {
     echo ""
-    echo "📝 Comandos útiles de Marp:"
-    echo "   marp archivo.md --pdf          # Generar PDF"
-    echo "   marp archivo.md --html         # Generar HTML"
-    echo "   marp archivo.md --pptx         # Generar PowerPoint"
-    echo "   marp archivo.md --watch        # Modo watch (auto-regenera)"
+    echo "📝 Useful Marp commands:"
+    echo "   marp file.md --pdf          # Generate PDF"
+    echo "   marp file.md --html         # Generate HTML"
+    echo "   marp file.md --pptx         # Generate PowerPoint"
+    echo "   marp file.md --watch        # Watch mode (auto-regenerate)"
     echo ""
-    echo "🔧 Scripts disponibles en este proyecto:"
-    echo "   ./scripts/run_conversion.sh                    # Convertir archivos Marp a PDF"
-    echo "   ./scripts/run_conversion.sh -h                 # Ver ayuda del script"
-    echo "   ./scripts/run_conversion.sh -i slides -o pdf   # Directorios personalizados"
+    echo "🔧 Available scripts in this project:"
+    echo "   ./scripts/run_conversion.sh                    # Convert Marp files to PDF"
+    echo "   ./scripts/run_conversion.sh -h                 # View script help"
+    echo "   ./scripts/run_conversion.sh -i slides -o pdf   # Custom directories"
     echo ""
-    echo "📁 Estructura típica de carpetas:"
-    echo "   - marp_slides/: Archivos Marp (.md)"
-    echo "   - pdf_slides/: Archivos PDF generados"
-    echo "   - scripts/: Scripts de conversión"
+    echo "📁 Typical folder structure:"
+    echo "   - marp_slides/: Marp files (.md)"
+    echo "   - pdf_slides/: Generated PDF files"
+    echo "   - scripts/: Conversion scripts"
     echo ""
-    echo "💡 Para usar en otros proyectos:"
-    echo "   1. Copia la carpeta scripts/ a tu nuevo proyecto"
-    echo "   2. Ejecuta: ./scripts/setup_marp.sh"
-    echo "   3. Ejecuta: ./scripts/run_conversion.sh"
+    echo "💡 To use in other projects:"
+    echo "   1. Copy the scripts/ folder to your new project"
+    echo "   2. Run: ./scripts/setup_marp.sh"
+    echo "   3. Run: ./scripts/run_conversion.sh"
     echo ""
 }
