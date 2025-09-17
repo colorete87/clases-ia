@@ -86,12 +86,35 @@ echo "🚀 Creating theme: $THEME_NAME"
 # Create themes directory if it doesn't exist
 mkdir -p "$THEMES_DIR"
 
-# Copy the entire example theme structure
+# Create the target theme directory structure
 if [ "$VERBOSE" = true ]; then
-    echo "📁 Copying example theme structure..."
+    echo "📁 Creating theme directory structure..."
 fi
 
-cp -r "$EXAMPLE_THEME_DIR" "$TARGET_THEME_DIR"
+mkdir -p "$TARGET_THEME_DIR/presentation/img_src"
+mkdir -p "$TARGET_THEME_DIR/presentation/md_src"
+mkdir -p "$TARGET_THEME_DIR/presentation/marp_slides"
+mkdir -p "$TARGET_THEME_DIR/presentation/pdf_slides"
+
+# Copy specific files only (source files, not generated ones)
+if [ "$VERBOSE" = true ]; then
+    echo "📄 Copying source files..."
+fi
+
+# Copy configuration file
+cp "$EXAMPLE_THEME_DIR/marp.config.sh" "$TARGET_THEME_DIR/"
+
+# Copy program.md (will be updated later)
+cp "$EXAMPLE_THEME_DIR/program.md" "$TARGET_THEME_DIR/"
+
+# Copy style.css
+cp "$EXAMPLE_THEME_DIR/presentation/style.css" "$TARGET_THEME_DIR/presentation/"
+
+# Copy all images from img_src
+cp "$EXAMPLE_THEME_DIR/presentation/img_src/"* "$TARGET_THEME_DIR/presentation/img_src/"
+
+# Copy only the introduction.md file from md_src (not all md files)
+cp "$EXAMPLE_THEME_DIR/presentation/md_src/introduction.md" "$TARGET_THEME_DIR/presentation/md_src/"
 
 # Update the marp.config.sh file with the new theme name
 if [ "$VERBOSE" = true ]; then
@@ -124,13 +147,13 @@ cat > "$TARGET_THEME_DIR/program.md" << EOF
 - Evaluation
 EOF
 
-# Update the markdown files to reference the new theme
+# Update the markdown file to reference the new theme
 if [ "$VERBOSE" = true ]; then
-    echo "📝 Updating markdown files..."
+    echo "📝 Updating introduction.md..."
 fi
 
-# Update introduccion.md
-cat > "$TARGET_THEME_DIR/presentation/md_src/introduccion.md" << EOF
+# Update introduction.md with theme-specific content
+cat > "$TARGET_THEME_DIR/presentation/md_src/introduction.md" << EOF
 # Introduction to $THEME_NAME
 
 ## What will we learn?
@@ -156,33 +179,6 @@ cat > "$TARGET_THEME_DIR/presentation/md_src/introduccion.md" << EOF
 - Motivation to learn
 EOF
 
-# Update desarrollo.md
-cat > "$TARGET_THEME_DIR/presentation/md_src/desarrollo.md" << EOF
-# $THEME_NAME Development
-
-## Development Environment
-
-- Required tools
-- Configuration
-- Best practices
-
----
-
-## Implementation
-
-1. **Planning** the approach
-2. **Developing** step by step
-3. **Testing** and validation
-
----
-
-## Next Steps
-
-- Practice with real examples
-- Apply in your projects
-- Continue learning
-EOF
-
 echo ""
 echo "🎉 Theme created successfully!"
 echo ""
@@ -191,8 +187,15 @@ echo "   ├── program.md"
 echo "   ├── marp.config.sh"
 echo "   └── presentation/"
 echo "       ├── img_src/ (logos and images copied)"
-echo "       ├── md_src/ (updated markdown files)"
-echo "       └── style.css (copied)"
+echo "       │   ├── background.png"
+echo "       │   ├── example.jpg"
+echo "       │   ├── logo_left.png"
+echo "       │   └── logo_right.png"
+echo "       ├── md_src/"
+echo "       │   └── introduction.md"
+echo "       ├── marp_slides/ (empty)"
+echo "       ├── pdf_slides/ (empty)"
+echo "       └── style.css"
 echo ""
 echo "📝 Next steps:"
 echo "   1. make all THEME=$THEME_NAME"

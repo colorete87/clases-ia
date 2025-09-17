@@ -2,7 +2,7 @@
 # Facilitates the use of presentation conversion scripts
 
 # Default configuration
-THEME ?= example
+THEME ?= fine-tuning
 VERBOSE ?= false
 FORCE ?= false
 
@@ -30,7 +30,7 @@ help: ## Show this help
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  %-15s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 	@echo ""
 	@echo "Variables:"
-	@echo "  THEME           Theme/project to use (default: example)"
+	@echo "  THEME           Theme/project to use (default: fine-tuning)"
 	@echo "  VERBOSE         Verbose mode (default: false)"
 	@echo "  FORCE           Force mode - skip all confirmations (default: false)"
 	@echo "  LOGO_LEFT       Left logo path (default: $(IMG_SRC_DIR)/logo_left.png)"
