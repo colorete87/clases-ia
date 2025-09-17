@@ -14,7 +14,7 @@ DEFAULT_PROGRAMA="programa.md"
 # Configuración de logos y fondo
 DEFAULT_LOGO_LEFT="presentation/img_src/logo_left.png"
 DEFAULT_LOGO_RIGHT="presentation/img_src/logo_right.png"
-DEFAULT_BACKGROUND="presentation/img_src/background.jpg"
+DEFAULT_BACKGROUND="presentation/img_src/background.png"
 
 # Configuración de header y footer
 DEFAULT_HEADER_TEXT="Mi Empresa - Curso de Capacitación"
