@@ -19,7 +19,7 @@ BACKGROUND ?= $(IMG_SRC_DIR)/background.png
 HEADER_TEXT ?= "My Company - Training Course"
 FOOTER_TEXT ?= "Confidential - All rights reserved"
 
-.PHONY: help setup install clean all convert md-to-marp watch config validate create-theme default-logos show-config custom open-pdfs set-theme get-theme
+.PHONY: help setup install clean all convert md-to-marp md-to-pdf-docs watch config validate create-theme default-logos show-config custom open-pdfs set-theme get-theme
 
 # Default command
 help: ## Show this help
@@ -46,6 +46,7 @@ help: ## Show this help
 	@echo "  make all                      # Convert everything with logos/headers/footers"
 	@echo "  make all THEME=my-course      # Convert everything (my-course)"
 	@echo "  make convert VERBOSE=true     # Convert with verbose mode"
+	@echo "  make md-to-pdf-docs           # Generate PDF documents (A4 format)"
 	@echo "  make all FORCE=true           # Convert without any confirmations"
 	@echo "  make all SKIP_PROMPT=true     # Convert without prompts but preserve marp files"
 	@echo "  make create-theme NAME=example   # Create new theme 'example'"
@@ -96,6 +97,14 @@ convert: ## Convert Marp files to PDF
 		$(SCRIPTS_DIR)/marp_tools.sh convert --project-dir $(PWD)/$(THEME_DIR); \
 	fi
 
+md-to-pdf-docs: ## Convert MD source files to PDF documents (A4 format)
+	@echo "📄 Converting MD source files to PDF documents (A4 format)..."
+	@if [ "$(VERBOSE)" = "true" ]; then \
+		$(SCRIPTS_DIR)/convert_md_to_pdf_docs.py $(THEME_DIR) --verbose; \
+	else \
+		$(SCRIPTS_DIR)/convert_md_to_pdf_docs.py $(THEME_DIR); \
+	fi
+
 all: ## Convert everything: MD -> Marp -> PDF with logos/headers/footers
 	@echo "🔄 Converting everything: MD -> Marp -> PDF with logos, headers, and footers..."
 	@skip_marp_conversion=false; \
@@ -129,9 +138,11 @@ all: ## Convert everything: MD -> Marp -> PDF with logos/headers/footers
 	if [ "$(VERBOSE)" = "true" ]; then \
 		$(SCRIPTS_DIR)/marp_tools.sh convert --project-dir $(PWD)/$(THEME_DIR) -v; \
 		$(SCRIPTS_DIR)/convert_program_to_pdf.py $(THEME_DIR) --verbose; \
+		$(SCRIPTS_DIR)/convert_md_to_pdf_docs.py $(THEME_DIR) --verbose; \
 	else \
 		$(SCRIPTS_DIR)/marp_tools.sh convert --project-dir $(PWD)/$(THEME_DIR); \
 		$(SCRIPTS_DIR)/convert_program_to_pdf.py $(THEME_DIR); \
+		$(SCRIPTS_DIR)/convert_md_to_pdf_docs.py $(THEME_DIR); \
 	fi
 
 watch: ## Watch mode (auto-regenerate)
@@ -165,6 +176,10 @@ clean: ## Clean PDF files only (preserves marp_slides)
 	@if [ -d "$(THEME_DIR)/presentation/pdf_slides" ]; then \
 		echo "  Removing $(THEME_DIR)/presentation/pdf_slides/"; \
 		rm -rf $(THEME_DIR)/presentation/pdf_slides/*; \
+	fi
+	@if [ -d "$(THEME_DIR)/presentation/pdf_docs" ]; then \
+		echo "  Removing $(THEME_DIR)/presentation/pdf_docs/"; \
+		rm -rf $(THEME_DIR)/presentation/pdf_docs/*; \
 	fi
 	@if [ -f "$(THEME_DIR)/program.pdf" ]; then \
 		echo "  Removing $(THEME_DIR)/program.pdf"; \
@@ -210,20 +225,24 @@ clean-all: ## Clean all generated files with confirmation
 		fi; \
 		read -p "Are you sure you want to continue? (y/N): " confirm && \
 		if [ "$$confirm" = "y" ] || [ "$$confirm" = "Y" ]; then \
-			echo "🧹 Cleaning all generated files..."; \
-			if [ -d "$(THEME_DIR)/presentation/marp_slides" ]; then \
-				echo "  Removing $(THEME_DIR)/presentation/marp_slides/"; \
-				rm -rf $(THEME_DIR)/presentation/marp_slides/*; \
-			fi; \
-			if [ -d "$(THEME_DIR)/presentation/pdf_slides" ]; then \
-				echo "  Removing $(THEME_DIR)/presentation/pdf_slides/"; \
-				rm -rf $(THEME_DIR)/presentation/pdf_slides/*; \
-			fi; \
-			if [ -f "$(THEME_DIR)/program.pdf" ]; then \
-				echo "  Removing $(THEME_DIR)/program.pdf"; \
-				rm -f $(THEME_DIR)/program.pdf; \
-			fi; \
-			echo "✅ Complete cleanup finished"; \
+		echo "🧹 Cleaning all generated files..."; \
+		if [ -d "$(THEME_DIR)/presentation/marp_slides" ]; then \
+			echo "  Removing $(THEME_DIR)/presentation/marp_slides/"; \
+			rm -rf $(THEME_DIR)/presentation/marp_slides/*; \
+		fi; \
+		if [ -d "$(THEME_DIR)/presentation/pdf_slides" ]; then \
+			echo "  Removing $(THEME_DIR)/presentation/pdf_slides/"; \
+			rm -rf $(THEME_DIR)/presentation/pdf_slides/*; \
+		fi; \
+		if [ -d "$(THEME_DIR)/presentation/pdf_docs" ]; then \
+			echo "  Removing $(THEME_DIR)/presentation/pdf_docs/"; \
+			rm -rf $(THEME_DIR)/presentation/pdf_docs/*; \
+		fi; \
+		if [ -f "$(THEME_DIR)/program.pdf" ]; then \
+			echo "  Removing $(THEME_DIR)/program.pdf"; \
+			rm -f $(THEME_DIR)/program.pdf; \
+		fi; \
+		echo "✅ Complete cleanup finished"; \
 		else \
 			echo "❌ Cleanup cancelled"; \
 		fi; \
@@ -237,6 +256,10 @@ clean-all: ## Clean all generated files with confirmation
 			echo "  Removing $(THEME_DIR)/presentation/pdf_slides/"; \
 			rm -rf $(THEME_DIR)/presentation/pdf_slides/*; \
 		fi; \
+		if [ -d "$(THEME_DIR)/presentation/pdf_docs" ]; then \
+			echo "  Removing $(THEME_DIR)/presentation/pdf_docs/"; \
+			rm -rf $(THEME_DIR)/presentation/pdf_docs/*; \
+		fi; \
 		if [ -f "$(THEME_DIR)/program.pdf" ]; then \
 			echo "  Removing $(THEME_DIR)/program.pdf"; \
 			rm -f $(THEME_DIR)/program.pdf; \
@@ -248,29 +271,36 @@ status: ## Show file status
 	@echo "📊 File status for theme '$(THEME)':"
 	@echo ""
 	@echo "Source MD files:"
-	@if [ -d "$(THEME)/presentation/md_src" ]; then \
-		ls -la $(THEME)/presentation/md_src/ 2>/dev/null || echo "  Not found"; \
+	@if [ -d "$(THEME_DIR)/presentation/md_src" ]; then \
+		ls -la $(THEME_DIR)/presentation/md_src/ 2>/dev/null || echo "  Not found"; \
 	else \
 		echo "  Directory does not exist"; \
 	fi
 	@echo ""
 	@echo "Marp files:"
-	@if [ -d "$(THEME)/presentation/marp_slides" ]; then \
-		ls -la $(THEME)/presentation/marp_slides/ 2>/dev/null || echo "  Empty"; \
+	@if [ -d "$(THEME_DIR)/presentation/marp_slides" ]; then \
+		ls -la $(THEME_DIR)/presentation/marp_slides/ 2>/dev/null || echo "  Empty"; \
 	else \
 		echo "  Directory does not exist"; \
 	fi
 	@echo ""
-	@echo "PDF files:"
-	@if [ -d "$(THEME)/presentation/pdf_slides" ]; then \
-		ls -la $(THEME)/presentation/pdf_slides/ 2>/dev/null || echo "  Empty"; \
+	@echo "PDF Slides:"
+	@if [ -d "$(THEME_DIR)/presentation/pdf_slides" ]; then \
+		ls -la $(THEME_DIR)/presentation/pdf_slides/ 2>/dev/null || echo "  Empty"; \
+	else \
+		echo "  Directory does not exist"; \
+	fi
+	@echo ""
+	@echo "PDF Docs:"
+	@if [ -d "$(THEME_DIR)/presentation/pdf_docs" ]; then \
+		ls -la $(THEME_DIR)/presentation/pdf_docs/ 2>/dev/null || echo "  Empty"; \
 	else \
 		echo "  Directory does not exist"; \
 	fi
 	@echo ""
 	@echo "Images:"
-	@if [ -d "$(THEME)/presentation/img_src" ]; then \
-		ls -la $(THEME)/presentation/img_src/ 2>/dev/null || echo "  Empty"; \
+	@if [ -d "$(THEME_DIR)/presentation/img_src" ]; then \
+		ls -la $(THEME_DIR)/presentation/img_src/ 2>/dev/null || echo "  Empty"; \
 	else \
 		echo "  Directory does not exist"; \
 	fi
@@ -301,7 +331,7 @@ copy-images: ## Copy images to working directory
 		echo "❌ No image directory"; \
 	fi
 
-open-pdfs: ## Open program.pdf and all PDFs in pdf_slides directory
+open-pdfs: ## Open program.pdf and all PDFs in pdf_slides and pdf_docs directories
 	@echo "📖 Opening PDF files for theme '$(THEME)'..."
 	@pdf_count=0; \
 	if [ -f "$(THEME_DIR)/program.pdf" ]; then \
@@ -339,6 +369,25 @@ open-pdfs: ## Open program.pdf and all PDFs in pdf_slides directory
 		done; \
 	else \
 		echo "  ⚠️  No PDFs found in $(THEME_DIR)/presentation/pdf_slides/"; \
+	fi; \
+	if [ -d "$(THEME_DIR)/presentation/pdf_docs" ] && [ -n "$$(ls -A $(THEME_DIR)/presentation/pdf_docs/*.pdf 2>/dev/null)" ]; then \
+		for pdf in $(THEME_DIR)/presentation/pdf_docs/*.pdf; do \
+			if [ -f "$$pdf" ]; then \
+				echo "  Opening $$pdf"; \
+				if command -v xdg-open >/dev/null 2>&1; then \
+					xdg-open "$$pdf" 2>/dev/null & \
+				elif command -v evince >/dev/null 2>&1; then \
+					evince "$$pdf" 2>/dev/null & \
+				elif command -v okular >/dev/null 2>&1; then \
+					okular "$$pdf" 2>/dev/null & \
+				elif command -v firefox >/dev/null 2>&1; then \
+					firefox "$$pdf" 2>/dev/null & \
+				fi; \
+				pdf_count=$$((pdf_count + 1)); \
+			fi; \
+		done; \
+	else \
+		echo "  ⚠️  No PDFs found in $(THEME_DIR)/presentation/pdf_docs/"; \
 	fi; \
 	if [ $$pdf_count -eq 0 ]; then \
 		echo "❌ No PDF files found. Run 'make all' first to generate PDFs."; \
