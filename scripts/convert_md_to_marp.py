@@ -43,7 +43,9 @@ def add_marp_header(content: str, theme: str = None, logo_left: str = None,
                 # then we want '../img_src/logo_left.png'
                 try:
                     # Use images/ directory which is where Makefile copies the images
-                    logo_left_path = 'images/logo_left.png'
+                    # Preserve the original filename and extension
+                    filename = Path(logo_left).name
+                    logo_left_path = f'images/{filename}'
                 except ValueError:
                     # If we can't calculate relative path, use the original
                     logo_left_path = logo_left
@@ -58,7 +60,9 @@ def add_marp_header(content: str, theme: str = None, logo_left: str = None,
             else:
                 try:
                     # Use images/ directory which is where Makefile copies the images
-                    logo_right_path = 'images/logo_right.png'
+                    # Preserve the original filename and extension
+                    filename = Path(logo_right).name
+                    logo_right_path = f'images/{filename}'
                 except ValueError:
                     logo_right_path = logo_right
         
@@ -72,7 +76,9 @@ def add_marp_header(content: str, theme: str = None, logo_left: str = None,
             else:
                 try:
                     # Use images/ directory which is where Makefile copies the images
-                    background_path = 'images/background.jpg'
+                    # Preserve the original filename and extension
+                    filename = Path(background).name
+                    background_path = f'images/{filename}'
                 except ValueError:
                     background_path = background
         
