@@ -1,0 +1,138 @@
+/* @theme a4 */
+@import 'default';
+
+section {
+  width: 210mm;
+  height: 297mm;
+  padding: 20mm;
+  font-size: 12pt;
+  line-height: 1.4;
+  position: relative;
+}
+
+/* Background image support */
+section[data-background] {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Logo positioning */
+section::before {
+  content: '';
+  position: absolute;
+  top: 10mm;
+  left: 10mm;
+  width: 30mm;
+  height: 15mm;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: left center;
+  z-index: 10;
+}
+
+section::after {
+  content: '';
+  position: absolute;
+  top: 10mm;
+  right: 10mm;
+  width: 30mm;
+  height: 15mm;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: right center;
+  z-index: 10;
+}
+
+/* Logo classes for specific positioning */
+.logo-left {
+  position: absolute;
+  top: 10mm;
+  left: 10mm;
+  width: 30mm;
+  height: 15mm;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: left center;
+  z-index: 10;
+}
+
+.logo-right {
+  position: absolute;
+  top: 10mm;
+  right: 10mm;
+  width: 30mm;
+  height: 15mm;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: right center;
+  z-index: 10;
+}
+
+/* Header text */
+section[data-header]::before {
+  content: attr(data-header);
+  background-image: none;
+  width: auto;
+  height: auto;
+  top: 5mm;
+  left: 10mm;
+  right: 10mm;
+  text-align: left;
+  font-size: 10pt;
+  font-weight: bold;
+  color: #333;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 2mm 4mm;
+  border-radius: 2mm;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+/* Footer text */
+section[data-footer]::after {
+  content: attr(data-footer);
+  background-image: none;
+  width: auto;
+  height: auto;
+  bottom: 5mm;
+  left: 10mm;
+  right: 10mm;
+  top: auto;
+  text-align: center;
+  font-size: 9pt;
+  color: #666;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 2mm 4mm;
+  border-radius: 2mm;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Ensure content doesn't overlap with logos, headers, and footers */
+section h1:first-child {
+  margin-top: 25mm;
+}
+
+section[data-header] h1:first-child {
+  margin-top: 35mm;
+}
+
+section[data-footer] {
+  padding-bottom: 20mm;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 0;
+  margin-bottom: 0.5em;
+}
+
+p {
+  margin-bottom: 0.5em;
+}
+
+ul, ol {
+  margin-bottom: 0.5em;
+}
+
+li {
+  margin-bottom: 0.2em;
+}

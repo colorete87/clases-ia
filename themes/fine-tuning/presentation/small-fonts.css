@@ -1,0 +1,125 @@
+/* CSS para reducir el tamaño de fuentes en presentaciones Marp */
+
+/* Reducir tamaño base de toda la sección */
+section {
+    font-size: 0.9em !important;
+    padding: 1em !important;
+    line-height: 1.4 !important;
+    text-align: left !important;
+}
+
+/* Títulos principales con outline */
+h1 {
+    font-size: 2.2em !important;
+    margin-bottom: 0.5em !important;
+    margin-top: 0.3em !important;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3) !important;
+    border-bottom: 3px solid #333 !important;
+    padding-bottom: 0.2em !important;
+}
+
+h2 {
+    font-size: 1.8em !important;
+    margin-bottom: 0.4em !important;
+    margin-top: 0.25em !important;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2) !important;
+    border-bottom: 2px solid #666 !important;
+    padding-bottom: 0.15em !important;
+}
+
+h3 {
+    font-size: 1.5em !important;
+    margin-bottom: 0.3em !important;
+    margin-top: 0.2em !important;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1) !important;
+    border-left: 4px solid #999 !important;
+    padding-left: 0.3em !important;
+}
+
+h4 {
+    font-size: 1.3em !important;
+    margin-bottom: 0.25em !important;
+    margin-top: 0.15em !important;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1) !important;
+    border-left: 3px solid #ccc !important;
+    padding-left: 0.2em !important;
+}
+
+/* Texto normal y listas */
+p, li {
+    font-size: 1.2em !important;
+    line-height: 1.4 !important;
+    margin-bottom: 0.3em !important;
+    text-align: left !important;
+}
+
+ul, ol {
+    font-size: 1.2em !important;
+    margin-bottom: 0.3em !important;
+    text-align: left !important;
+}
+
+/* Mejorar listas con bullets más visibles */
+ul li {
+    list-style-type: disc !important;
+    margin-left: 1em !important;
+}
+
+ol li {
+    list-style-type: decimal !important;
+    margin-left: 1em !important;
+}
+
+/* Código */
+code {
+    font-size: 1.0em !important;
+    background-color: #f4f4f4 !important;
+    padding: 0.1em 0.3em !important;
+    border-radius: 3px !important;
+    border: 1px solid #ddd !important;
+}
+
+pre {
+    font-size: 0.9em !important;
+    margin-bottom: 0.3em !important;
+    background-color: #f8f8f8 !important;
+    padding: 0.5em !important;
+    border-radius: 5px !important;
+    border: 1px solid #ddd !important;
+    text-align: left !important;
+}
+
+blockquote {
+    font-size: 0.8em !important;
+    margin-bottom: 0.3em !important;
+}
+
+/* Reducir espaciado general */
+section > * {
+    margin-bottom: 0.2em !important;
+}
+
+/* Ajustar espaciado de listas anidadas */
+ul ul, ol ol, ul ol, ol ul {
+    margin-top: 0.1em !important;
+    margin-bottom: 0.1em !important;
+}
+
+/* Reducir espaciado entre elementos de lista */
+li {
+    margin-bottom: 0.1em !important;
+}
+
+/* Ajustar tablas si las hay */
+table {
+    font-size: 0.75em !important;
+}
+
+th, td {
+    padding: 0.2em !important;
+}
+
+/* Reducir espaciado de separadores horizontales */
+hr {
+    margin: 0.3em 0 !important;
+}
