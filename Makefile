@@ -128,10 +128,10 @@ all: ## Convert everything: MD -> Marp -> PDF with logos/headers/footers
 	fi; \
 	if [ "$(VERBOSE)" = "true" ]; then \
 		$(SCRIPTS_DIR)/marp_tools.sh convert --project-dir $(PWD)/$(THEME_DIR) -v; \
-		$(SCRIPTS_DIR)/marp_tools.sh convert-program --project-dir $(PWD)/$(THEME_DIR) -v; \
+		$(SCRIPTS_DIR)/convert_program_to_pdf.py $(THEME_DIR) --verbose; \
 	else \
 		$(SCRIPTS_DIR)/marp_tools.sh convert --project-dir $(PWD)/$(THEME_DIR); \
-		$(SCRIPTS_DIR)/marp_tools.sh convert-program --project-dir $(PWD)/$(THEME_DIR); \
+		$(SCRIPTS_DIR)/convert_program_to_pdf.py $(THEME_DIR); \
 	fi
 
 watch: ## Watch mode (auto-regenerate)
@@ -415,7 +415,7 @@ custom: ## Convert with custom logos/headers/footers (interactive)
 		--logo-left "$$left_logo" --logo-right "$$right_logo" \
 		--background "$$bg_image" --header "$$header_text" --footer "$$footer_text"; \
 	$(SCRIPTS_DIR)/marp_tools.sh convert --project-dir $(PWD)/$(THEME_DIR); \
-	$(SCRIPTS_DIR)/marp_tools.sh convert-program --project-dir $(PWD)/$(THEME_DIR); \
+	$(SCRIPTS_DIR)/convert_program_to_pdf.py $(THEME_DIR); \
 	echo "✅ Custom conversion completed!"
 
 # Development commands
