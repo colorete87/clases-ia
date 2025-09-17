@@ -67,9 +67,16 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Determine project directory
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 if [ -z "$PROJECT_DIR" ]; then
-    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
     PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
+else
+    # Convert relative path to absolute path
+    if [[ ! "$PROJECT_DIR" = /* ]]; then
+        # Make relative path relative to the script's parent directory (project root)
+        ROOT_DIR="$(dirname "$SCRIPT_DIR")"
+        PROJECT_DIR="$(cd "$ROOT_DIR" && cd "$PROJECT_DIR" && pwd)"
+    fi
 fi
 
 # Verify that project directory exists
@@ -87,6 +94,10 @@ source "$SCRIPT_DIR/config.sh"
 # Load theme-specific configuration
 load_theme_config "$PROJECT_DIR"
 
+# Update INPUT_DIR and OUTPUT_DIR from loaded configuration
+INPUT_DIR="${DEFAULT_MARP_SLIDES_DIR:-$INPUT_DIR}"
+OUTPUT_DIR="${DEFAULT_PDF_SLIDES_DIR:-$OUTPUT_DIR}"
+
 # Don't change to project directory, work from root directory
 
 if [ "$VERBOSE" = true ]; then
@@ -96,6 +107,8 @@ if [ "$VERBOSE" = true ]; then
     echo "🎨 Theme: ${THEME:-default}"
     echo ""
 fi
+
+# Debug output removed - path resolution is now working correctly
 
 echo "🚀 Starting conversion of Marp files to PDF..."
 echo ""

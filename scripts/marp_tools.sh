@@ -72,7 +72,8 @@ run_command() {
         return 0
     fi
     
-    eval "$cmd $*"
+    # Execute command with proper argument handling
+    eval "$cmd" '"$@"'
     return $?
 }
 
@@ -237,12 +238,13 @@ cmd_convert() {
         esac
     done
     
-    # Load theme-specific configuration if project_dir is specified
-    if [ -n "$project_dir" ]; then
-        load_theme_config "$project_dir"
-    fi
+    # Don't load configuration here - let run_conversion.sh handle it
+    # to avoid double loading and conflicts
     
-    run_command "bash $SCRIPT_DIR/run_conversion.sh" "${convert_args[@]}"
+# Debug output removed - argument passing is now working correctly
+    
+    # Call run_conversion.sh directly with proper argument passing
+    bash "$SCRIPT_DIR/run_conversion.sh" "${convert_args[@]}"
 }
 
 # Function to convert program.md directly to PDF

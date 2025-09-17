@@ -181,10 +181,13 @@ load_theme_config() {
 
 # Search for project configuration file (default behavior)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
+# Only set PROJECT_DIR if it's not already set (to avoid overwriting command line args)
+if [ -z "$PROJECT_DIR" ]; then
+    PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
+fi
 
-# Load default configuration (will be overridden by load_theme_config if called)
-load_theme_config ""
+# Note: load_theme_config should be called explicitly by scripts that need it
+# Don't auto-load here to avoid conflicts
 
 # Show configuration if requested
 if [ "${1:-}" = "--show-config" ]; then
