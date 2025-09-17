@@ -29,32 +29,32 @@ def find_program_css(theme_path):
 def get_default_css():
     """Return default CSS for program styling"""
     return """
-/* Default Program Styling */
+/* Default Program Styling - A4 Format */
 @page {
-    size: A4;
-    margin: 2.5cm;
+    size: 210mm 297mm;  /* Exact A4 dimensions */
+    margin: 15mm 20mm;  /* A4 theme margins */
     @top-center {
         content: "Course Program";
         font-family: Arial, sans-serif;
-        font-size: 10pt;
+        font-size: 7pt;  /* A4 theme font size */
         color: #666;
     }
     @bottom-center {
         content: "Page " counter(page) " of " counter(pages);
         font-family: Arial, sans-serif;
-        font-size: 9pt;
+        font-size: 6pt;  /* A4 theme font size */
         color: #666;
     }
 }
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 11pt;
-    line-height: 1.6;
+    font-size: 9pt;  /* A4 theme font size */
+    line-height: 1.3;  /* A4 theme line height */
     color: #333;
     max-width: none;
     margin: 0;
-    padding: 0;
+    padding: 15mm 20mm;  /* A4 theme padding */
 }
 
 /* Headers */

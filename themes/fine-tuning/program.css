@@ -1,115 +1,115 @@
-/* Program CSS for Fine-Tuning Theme */
+/* Program CSS for Fine-Tuning Theme - A4 Format */
 @page {
-    size: A4;
-    margin: 2.5cm;
+    size: 210mm 297mm;  /* Exact A4 dimensions */
+    margin: 15mm 20mm;  /* Same as A4 theme */
     @top-center {
         content: "Programa del Curso: Fine-Tuning de Modelos de Lenguaje (LLMs)";
         font-family: 'Segoe UI', Arial, sans-serif;
-        font-size: 9pt;
+        font-size: 7pt;  /* A4 theme font size */
         color: #2c3e50;
         font-weight: bold;
     }
     @bottom-center {
         content: "Página " counter(page) " de " counter(pages);
         font-family: 'Segoe UI', Arial, sans-serif;
-        font-size: 8pt;
+        font-size: 6pt;  /* A4 theme font size */
         color: #7f8c8d;
     }
 }
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 11pt;
-    line-height: 1.6;
+    font-size: 9pt;  /* A4 theme font size */
+    line-height: 1.3;  /* A4 theme line height */
     color: #2c3e50;
     max-width: none;
     margin: 0;
-    padding: 0;
+    padding: 15mm 20mm;  /* A4 theme padding */
     background: #fdfdfd;
 }
 
-/* Headers with professional styling */
+/* Headers with professional styling - A4 optimized */
 h1 {
-    font-size: 26pt;
+    font-size: 18pt;  /* Scaled for A4 */
     font-weight: 700;
     color: #2c3e50;
     margin-top: 0;
-    margin-bottom: 25pt;
-    border-bottom: 4pt solid #3498db;
-    padding-bottom: 12pt;
+    margin-bottom: 0.8em;  /* A4 theme spacing */
+    border-bottom: 2mm solid #3498db;
+    padding-bottom: 3mm;
     page-break-after: avoid;
     text-align: center;
     background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-    padding-top: 15pt;
-    border-radius: 8pt 8pt 0 0;
+    padding-top: 4mm;
+    border-radius: 2mm 2mm 0 0;
 }
 
 h2 {
-    font-size: 18pt;
+    font-size: 12pt;  /* Scaled for A4 */
     font-weight: 600;
     color: #34495e;
-    margin-top: 30pt;
-    margin-bottom: 18pt;
+    margin-top: 0;
+    margin-bottom: 0.6em;  /* A4 theme spacing */
     page-break-after: avoid;
-    border-left: 5pt solid #e74c3c;
-    padding-left: 20pt;
+    border-left: 2mm solid #e74c3c;
+    padding-left: 5mm;
     background: linear-gradient(90deg, rgba(231, 76, 60, 0.1), transparent);
-    padding-top: 10pt;
-    padding-bottom: 10pt;
-    border-radius: 0 8pt 8pt 0;
+    padding-top: 2.5mm;
+    padding-bottom: 2.5mm;
+    border-radius: 0 2mm 2mm 0;
 }
 
 h3 {
-    font-size: 14pt;
+    font-size: 10pt;  /* Scaled for A4 */
     font-weight: 600;
     color: #2c3e50;
-    margin-top: 22pt;
-    margin-bottom: 14pt;
+    margin-top: 0;
+    margin-bottom: 0.5em;  /* A4 theme spacing */
     page-break-after: avoid;
-    border-bottom: 2pt solid #95a5a6;
-    padding-bottom: 6pt;
+    border-bottom: 1mm solid #95a5a6;
+    padding-bottom: 1.5mm;
 }
 
 h4 {
-    font-size: 12pt;
+    font-size: 9pt;  /* Same as body for A4 */
     font-weight: 600;
     color: #34495e;
-    margin-top: 18pt;
-    margin-bottom: 12pt;
+    margin-top: 0;
+    margin-bottom: 0.5em;  /* A4 theme spacing */
     page-break-after: avoid;
 }
 
 h5, h6 {
-    font-size: 11pt;
+    font-size: 9pt;  /* Same as body for A4 */
     font-weight: 600;
     color: #7f8c8d;
-    margin-top: 15pt;
-    margin-bottom: 10pt;
+    margin-top: 0;
+    margin-bottom: 0.5em;  /* A4 theme spacing */
     page-break-after: avoid;
 }
 
-/* Paragraphs */
+/* Paragraphs - A4 optimized */
 p {
-    margin-bottom: 14pt;
+    margin-bottom: 0.5em;  /* A4 theme spacing */
     text-align: justify;
     orphans: 2;
     widows: 2;
 }
 
-/* Lists with enhanced styling */
+/* Lists with enhanced styling - A4 optimized */
 ul, ol {
-    margin-bottom: 16pt;
-    padding-left: 28pt;
+    margin-bottom: 0.5em;  /* A4 theme spacing */
+    padding-left: 7mm;  /* Millimeter spacing */
 }
 
 li {
-    margin-bottom: 8pt;
-    line-height: 1.5;
+    margin-bottom: 0.2em;  /* A4 theme spacing */
+    line-height: 1.3;  /* A4 theme line height */
 }
 
 ul li::marker {
     color: #3498db;
-    font-size: 1.2em;
+    font-size: 1.1em;  /* Slightly smaller for A4 */
 }
 
 ol li::marker {
@@ -119,8 +119,8 @@ ol li::marker {
 
 /* Nested lists */
 ul ul, ol ol, ul ol, ol ul {
-    margin-top: 6pt;
-    margin-bottom: 6pt;
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
 }
 
 /* Strong and emphasis */
@@ -134,30 +134,30 @@ em, i {
     color: #34495e;
 }
 
-/* Code styling */
+/* Code styling - A4 optimized */
 code {
     font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
     background-color: #f8f9fa;
-    padding: 3pt 6pt;
-    border-radius: 4pt;
-    font-size: 10pt;
+    padding: 1mm 1.5mm;
+    border-radius: 1mm;
+    font-size: 8pt;  /* Smaller for A4 */
     color: #e74c3c;
-    border: 1pt solid #dee2e6;
+    border: 0.5pt solid #dee2e6;
 }
 
 pre {
     background-color: #f8f9fa;
-    border: 1pt solid #dee2e6;
-    border-left: 4pt solid #3498db;
-    border-radius: 6pt;
-    padding: 18pt;
-    margin: 18pt 0;
+    border: 0.5pt solid #dee2e6;
+    border-left: 2mm solid #3498db;
+    border-radius: 1.5mm;
+    padding: 4mm;
+    margin: 4mm 0;
     font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-    font-size: 10pt;
-    line-height: 1.4;
+    font-size: 8pt;  /* Smaller for A4 */
+    line-height: 1.3;
     overflow-x: auto;
     page-break-inside: avoid;
-    box-shadow: 0 2pt 4pt rgba(0,0,0,0.1);
+    box-shadow: 0 1mm 2mm rgba(0,0,0,0.1);
 }
 
 /* Blockquotes */
@@ -229,39 +229,39 @@ a:hover {
 /* Special classes for program structure */
 .section-info {
     background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(52, 152, 219, 0.05));
-    border: 2pt solid rgba(52, 152, 219, 0.3);
-    border-radius: 10pt;
-    padding: 20pt;
-    margin: 25pt 0;
+    border: 1pt solid rgba(52, 152, 219, 0.3);
+    border-radius: 2.5mm;
+    padding: 5mm;
+    margin: 6mm 0;
     page-break-inside: avoid;
-    box-shadow: 0 4pt 8pt rgba(52, 152, 219, 0.1);
+    box-shadow: 0 2mm 4mm rgba(52, 152, 219, 0.1);
 }
 
 .objectives {
     background: linear-gradient(135deg, rgba(39, 174, 96, 0.1), rgba(39, 174, 96, 0.05));
-    border: 2pt solid rgba(39, 174, 96, 0.3);
-    border-radius: 10pt;
-    padding: 20pt;
-    margin: 25pt 0;
-    box-shadow: 0 4pt 8pt rgba(39, 174, 96, 0.1);
+    border: 1pt solid rgba(39, 174, 96, 0.3);
+    border-radius: 2.5mm;
+    padding: 5mm;
+    margin: 6mm 0;
+    box-shadow: 0 2mm 4mm rgba(39, 174, 96, 0.1);
 }
 
 .prerequisites {
     background: linear-gradient(135deg, rgba(243, 156, 18, 0.1), rgba(243, 156, 18, 0.05));
-    border: 2pt solid rgba(243, 156, 18, 0.3);
-    border-radius: 10pt;
-    padding: 20pt;
-    margin: 25pt 0;
-    box-shadow: 0 4pt 8pt rgba(243, 156, 18, 0.1);
+    border: 1pt solid rgba(243, 156, 18, 0.3);
+    border-radius: 2.5mm;
+    padding: 5mm;
+    margin: 6mm 0;
+    box-shadow: 0 2mm 4mm rgba(243, 156, 18, 0.1);
 }
 
 .contact-info {
     background: linear-gradient(135deg, rgba(155, 89, 182, 0.1), rgba(155, 89, 182, 0.05));
-    border: 2pt solid rgba(155, 89, 182, 0.3);
-    border-radius: 10pt;
-    padding: 20pt;
-    margin: 25pt 0;
-    box-shadow: 0 4pt 8pt rgba(155, 89, 182, 0.1);
+    border: 1pt solid rgba(155, 89, 182, 0.3);
+    border-radius: 2.5mm;
+    padding: 5mm;
+    margin: 6mm 0;
+    box-shadow: 0 2mm 4mm rgba(155, 89, 182, 0.1);
 }
 
 /* Emoji support and styling */

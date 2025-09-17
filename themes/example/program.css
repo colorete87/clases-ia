@@ -1,95 +1,95 @@
-/* Program CSS for Example Theme */
+/* Program CSS for Example Theme - A4 Format */
 @page {
-    size: A4;
-    margin: 2.5cm;
+    size: 210mm 297mm;  /* Exact A4 dimensions */
+    margin: 15mm 20mm;  /* Same as A4 theme */
     @top-center {
         content: "Course Program - Example Theme";
         font-family: Arial, sans-serif;
-        font-size: 10pt;
+        font-size: 7pt;  /* A4 theme font size */
         color: #667eea;
         font-weight: bold;
     }
     @bottom-center {
         content: "Page " counter(page) " of " counter(pages);
         font-family: Arial, sans-serif;
-        font-size: 9pt;
+        font-size: 6pt;  /* A4 theme font size */
         color: #764ba2;
     }
 }
 
 body {
     font-family: 'Arial', sans-serif;
-    font-size: 11pt;
-    line-height: 1.6;
+    font-size: 9pt;  /* A4 theme font size */
+    line-height: 1.3;  /* A4 theme line height */
     color: #333;
     max-width: none;
     margin: 0;
-    padding: 0;
+    padding: 15mm 20mm;  /* A4 theme padding */
     background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
 }
 
-/* Headers with theme colors */
+/* Headers with theme colors - A4 optimized */
 h1 {
-    font-size: 24pt;
+    font-size: 16pt;  /* Scaled for A4 */
     font-weight: bold;
     color: #667eea;
     margin-top: 0;
-    margin-bottom: 20pt;
-    border-bottom: 3pt solid #764ba2;
-    padding-bottom: 10pt;
+    margin-bottom: 0.8em;  /* A4 theme spacing */
+    border-bottom: 2mm solid #764ba2;
+    padding-bottom: 2mm;
     page-break-after: avoid;
-    text-shadow: 1pt 1pt 2pt rgba(0,0,0,0.1);
+    text-shadow: 0.5pt 0.5pt 1pt rgba(0,0,0,0.1);
 }
 
 h2 {
-    font-size: 18pt;
+    font-size: 12pt;  /* Scaled for A4 */
     font-weight: bold;
     color: #764ba2;
-    margin-top: 25pt;
-    margin-bottom: 15pt;
+    margin-top: 0;
+    margin-bottom: 0.6em;  /* A4 theme spacing */
     page-break-after: avoid;
-    border-left: 4pt solid #667eea;
-    padding-left: 15pt;
+    border-left: 2mm solid #667eea;
+    padding-left: 4mm;
     background: linear-gradient(90deg, rgba(102, 126, 234, 0.1), transparent);
-    padding-top: 8pt;
-    padding-bottom: 8pt;
+    padding-top: 2mm;
+    padding-bottom: 2mm;
 }
 
 h3 {
-    font-size: 14pt;
+    font-size: 10pt;  /* Scaled for A4 */
     font-weight: bold;
     color: #667eea;
-    margin-top: 20pt;
-    margin-bottom: 12pt;
+    margin-top: 0;
+    margin-bottom: 0.5em;  /* A4 theme spacing */
     page-break-after: avoid;
 }
 
 h4, h5, h6 {
-    font-size: 12pt;
+    font-size: 9pt;  /* Same as body for A4 */
     font-weight: bold;
     color: #764ba2;
-    margin-top: 15pt;
-    margin-bottom: 10pt;
+    margin-top: 0;
+    margin-bottom: 0.5em;  /* A4 theme spacing */
     page-break-after: avoid;
 }
 
-/* Paragraphs */
+/* Paragraphs - A4 optimized */
 p {
-    margin-bottom: 12pt;
+    margin-bottom: 0.5em;  /* A4 theme spacing */
     text-align: justify;
     orphans: 2;
     widows: 2;
 }
 
-/* Lists with custom styling */
+/* Lists with custom styling - A4 optimized */
 ul, ol {
-    margin-bottom: 15pt;
-    padding-left: 25pt;
+    margin-bottom: 0.5em;  /* A4 theme spacing */
+    padding-left: 6mm;  /* Millimeter spacing */
 }
 
 li {
-    margin-bottom: 6pt;
-    line-height: 1.5;
+    margin-bottom: 0.2em;  /* A4 theme spacing */
+    line-height: 1.3;  /* A4 theme line height */
 }
 
 ul li::marker {
@@ -113,27 +113,27 @@ em, i {
     color: #667eea;
 }
 
-/* Code with theme colors */
+/* Code with theme colors - A4 optimized */
 code {
     font-family: 'Courier New', monospace;
     background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
-    padding: 2pt 6pt;
-    border-radius: 4pt;
-    font-size: 10pt;
+    padding: 1mm 1.5mm;
+    border-radius: 1mm;
+    font-size: 8pt;  /* Smaller for A4 */
     color: #764ba2;
-    border: 1pt solid rgba(102, 126, 234, 0.2);
+    border: 0.5pt solid rgba(102, 126, 234, 0.2);
 }
 
 pre {
     background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
-    border: 1pt solid rgba(102, 126, 234, 0.3);
-    border-left: 4pt solid #667eea;
-    border-radius: 5pt;
-    padding: 15pt;
-    margin: 15pt 0;
+    border: 0.5pt solid rgba(102, 126, 234, 0.3);
+    border-left: 2mm solid #667eea;
+    border-radius: 2mm;
+    padding: 3mm;
+    margin: 3mm 0;
     font-family: 'Courier New', monospace;
-    font-size: 10pt;
-    line-height: 1.4;
+    font-size: 8pt;  /* Smaller for A4 */
+    line-height: 1.3;
     overflow-x: auto;
     page-break-inside: avoid;
 }
@@ -191,39 +191,39 @@ a:hover {
     color: #764ba2;
 }
 
-/* Special classes for program structure */
+/* Special classes for program structure - A4 optimized */
 .section-info {
     background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.05));
-    border: 1pt solid rgba(102, 126, 234, 0.3);
-    border-radius: 8pt;
-    padding: 15pt;
-    margin: 20pt 0;
+    border: 0.5pt solid rgba(102, 126, 234, 0.3);
+    border-radius: 2mm;
+    padding: 3mm;
+    margin: 3mm 0;
     page-break-inside: avoid;
-    box-shadow: 0 2pt 4pt rgba(102, 126, 234, 0.1);
+    box-shadow: 0 1mm 2mm rgba(102, 126, 234, 0.1);
 }
 
 .objectives {
     background: linear-gradient(135deg, rgba(102, 126, 234, 0.08), transparent);
-    border: 1pt solid #667eea;
-    border-radius: 8pt;
-    padding: 15pt;
-    margin: 20pt 0;
+    border: 0.5pt solid #667eea;
+    border-radius: 2mm;
+    padding: 3mm;
+    margin: 3mm 0;
 }
 
 .prerequisites {
     background: linear-gradient(135deg, rgba(118, 75, 162, 0.08), transparent);
-    border: 1pt solid #764ba2;
-    border-radius: 8pt;
-    padding: 15pt;
-    margin: 20pt 0;
+    border: 0.5pt solid #764ba2;
+    border-radius: 2mm;
+    padding: 3mm;
+    margin: 3mm 0;
 }
 
 .contact-info {
     background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
-    border: 1pt solid rgba(102, 126, 234, 0.4);
-    border-radius: 8pt;
-    padding: 15pt;
-    margin: 20pt 0;
+    border: 0.5pt solid rgba(102, 126, 234, 0.4);
+    border-radius: 2mm;
+    padding: 3mm;
+    margin: 3mm 0;
 }
 
 /* Emoji support */

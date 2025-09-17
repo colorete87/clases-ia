@@ -9,8 +9,8 @@ section {
 }
 
 h1, h2, h3 {
-    color: #ffd700;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    color: #222;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
 }
 
 h1 {
