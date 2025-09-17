@@ -5,6 +5,7 @@
 THEME ?= $(shell [ -f .current-theme ] && cat .current-theme || echo "example")
 VERBOSE ?= false
 FORCE ?= false
+SKIP_PROMPT ?= false
 
 # Directories
 SCRIPTS_DIR = scripts
@@ -33,6 +34,7 @@ help: ## Show this help
 	@echo "  THEME           Theme/project to use (default: example)"
 	@echo "  VERBOSE         Verbose mode (default: false)"
 	@echo "  FORCE           Force mode - skip all confirmations (default: false)"
+	@echo "  SKIP_PROMPT     Skip prompts but preserve existing marp files (default: false)"
 	@echo "  LOGO_LEFT       Left logo path (default: $(IMG_SRC_DIR)/logo_left.png)"
 	@echo "  LOGO_RIGHT      Right logo path (default: $(IMG_SRC_DIR)/logo_right.png)"
 	@echo "  BACKGROUND      Background image path (default: $(IMG_SRC_DIR)/background.png)"
@@ -45,6 +47,7 @@ help: ## Show this help
 	@echo "  make all THEME=my-course      # Convert everything (my-course)"
 	@echo "  make convert VERBOSE=true     # Convert with verbose mode"
 	@echo "  make all FORCE=true           # Convert without any confirmations"
+	@echo "  make all SKIP_PROMPT=true     # Convert without prompts but preserve marp files"
 	@echo "  make create-theme NAME=example   # Create new theme 'example'"
 	@echo "  make open-pdfs THEME=my-course    # Open all PDFs for theme"
 	@echo "  make all HEADER_TEXT='My Company' FOOTER_TEXT='Confidential' # Custom headers/footers"
@@ -60,6 +63,10 @@ install: setup ## Alias for setup
 md-to-marp: ## Convert MD files to Marp format with logos/headers/footers
 	@echo "📝 Converting MD to Marp with logos, headers, and footers..."
 	@if [ "$(FORCE)" != "true" ] && [ -d "$(THEME_DIR)/presentation/marp_slides" ] && [ -n "$$(ls -A $(THEME_DIR)/presentation/marp_slides 2>/dev/null)" ]; then \
+		if [ "$(SKIP_PROMPT)" = "true" ]; then \
+			echo "⏭️  SKIP_PROMPT enabled: Preserving existing marp_slides, conversion cancelled"; \
+			exit 0; \
+		fi; \
 		echo "⚠️  WARNING: Files exist in $(THEME_DIR)/presentation/marp_slides/"; \
 		echo "   This command will overwrite existing Marp files, including any manual adjustments."; \
 		echo ""; \
@@ -93,13 +100,18 @@ all: ## Convert everything: MD -> Marp -> PDF with logos/headers/footers
 	@echo "🔄 Converting everything: MD -> Marp -> PDF with logos, headers, and footers..."
 	@skip_marp_conversion=false; \
 	if [ "$(FORCE)" != "true" ] && [ -d "$(THEME_DIR)/presentation/marp_slides" ] && [ -n "$$(ls -A $(THEME_DIR)/presentation/marp_slides 2>/dev/null)" ]; then \
-		echo "⚠️  WARNING: Files exist in $(THEME_DIR)/presentation/marp_slides/"; \
-		echo "   This command will overwrite existing Marp files, including any manual adjustments."; \
-		echo ""; \
-		read -p "Do you want to overwrite marp_slides? (y/N): " confirm && \
-		if [ "$$confirm" != "y" ] && [ "$$confirm" != "Y" ]; then \
-			echo "⏭️  Skipping marp_slides generation, will continue with PDF generation using existing files..."; \
+		if [ "$(SKIP_PROMPT)" = "true" ]; then \
+			echo "⏭️  SKIP_PROMPT enabled: Preserving existing marp_slides, will continue with PDF generation using existing files..."; \
 			skip_marp_conversion=true; \
+		else \
+			echo "⚠️  WARNING: Files exist in $(THEME_DIR)/presentation/marp_slides/"; \
+			echo "   This command will overwrite existing Marp files, including any manual adjustments."; \
+			echo ""; \
+			read -p "Do you want to overwrite marp_slides? (y/N): " confirm && \
+			if [ "$$confirm" != "y" ] && [ "$$confirm" != "Y" ]; then \
+				echo "⏭️  Skipping marp_slides generation, will continue with PDF generation using existing files..."; \
+				skip_marp_conversion=true; \
+			fi; \
 		fi; \
 	fi; \
 	make copy-images; \
@@ -165,6 +177,10 @@ clean-marp: ## Clean marp_slides with confirmation
 	@echo "   This includes any manual adjustments you may have made."
 	@echo ""
 	@if [ "$(FORCE)" != "true" ]; then \
+		if [ "$(SKIP_PROMPT)" = "true" ]; then \
+			echo "❌ SKIP_PROMPT enabled: Cleanup cancelled to preserve files"; \
+			exit 0; \
+		fi; \
 		read -p "Are you sure you want to continue? (y/N): " confirm && \
 		if [ "$$confirm" = "y" ] || [ "$$confirm" = "Y" ]; then \
 			if [ -d "$(THEME_DIR)/presentation/marp_slides" ]; then \
@@ -188,6 +204,10 @@ clean-all: ## Clean all generated files with confirmation
 	@echo "   This includes any manual adjustments you may have made."
 	@echo ""
 	@if [ "$(FORCE)" != "true" ]; then \
+		if [ "$(SKIP_PROMPT)" = "true" ]; then \
+			echo "❌ SKIP_PROMPT enabled: Cleanup cancelled to preserve files"; \
+			exit 0; \
+		fi; \
 		read -p "Are you sure you want to continue? (y/N): " confirm && \
 		if [ "$$confirm" = "y" ] || [ "$$confirm" = "Y" ]; then \
 			echo "🧹 Cleaning all generated files..."; \

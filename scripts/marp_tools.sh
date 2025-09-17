@@ -294,9 +294,26 @@ cmd_convert_program() {
     
     echo "📄 Found: $program_file"
     
-    # Create marp command with A4 theme
+    # Determine theme to use - prioritize presentation/style.css
+    local theme_file=""
+    local style_css="$project_dir/presentation/style.css"
     local a4_theme="$SCRIPT_DIR/a4-theme.css"
-    local cmd="marp '$program_file' --pdf --output '$project_dir/program.pdf' --allow-local-files --theme '$a4_theme'"
+    
+    if [ -f "$style_css" ]; then
+        theme_file="$style_css"
+        echo "📄 Using theme: $style_css"
+    elif [ -f "$a4_theme" ]; then
+        theme_file="$a4_theme"
+        echo "📄 Using fallback theme: $a4_theme"
+    else
+        echo "⚠️  No theme file found, using Marp default"
+    fi
+    
+    # Create marp command
+    local cmd="marp '$program_file' --pdf --output '$project_dir/program.pdf' --allow-local-files"
+    if [ -n "$theme_file" ]; then
+        cmd="$cmd --theme '$theme_file'"
+    fi
     
     if [ "$verbose" = true ]; then
         cmd="$cmd --verbose"

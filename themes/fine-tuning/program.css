@@ -1,0 +1,317 @@
+/* Program CSS for Fine-Tuning Theme */
+@page {
+    size: A4;
+    margin: 2.5cm;
+    @top-center {
+        content: "Programa del Curso: Fine-Tuning de Modelos de Lenguaje (LLMs)";
+        font-family: 'Segoe UI', Arial, sans-serif;
+        font-size: 9pt;
+        color: #2c3e50;
+        font-weight: bold;
+    }
+    @bottom-center {
+        content: "Página " counter(page) " de " counter(pages);
+        font-family: 'Segoe UI', Arial, sans-serif;
+        font-size: 8pt;
+        color: #7f8c8d;
+    }
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 11pt;
+    line-height: 1.6;
+    color: #2c3e50;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    background: #fdfdfd;
+}
+
+/* Headers with professional styling */
+h1 {
+    font-size: 26pt;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-top: 0;
+    margin-bottom: 25pt;
+    border-bottom: 4pt solid #3498db;
+    padding-bottom: 12pt;
+    page-break-after: avoid;
+    text-align: center;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    padding-top: 15pt;
+    border-radius: 8pt 8pt 0 0;
+}
+
+h2 {
+    font-size: 18pt;
+    font-weight: 600;
+    color: #34495e;
+    margin-top: 30pt;
+    margin-bottom: 18pt;
+    page-break-after: avoid;
+    border-left: 5pt solid #e74c3c;
+    padding-left: 20pt;
+    background: linear-gradient(90deg, rgba(231, 76, 60, 0.1), transparent);
+    padding-top: 10pt;
+    padding-bottom: 10pt;
+    border-radius: 0 8pt 8pt 0;
+}
+
+h3 {
+    font-size: 14pt;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-top: 22pt;
+    margin-bottom: 14pt;
+    page-break-after: avoid;
+    border-bottom: 2pt solid #95a5a6;
+    padding-bottom: 6pt;
+}
+
+h4 {
+    font-size: 12pt;
+    font-weight: 600;
+    color: #34495e;
+    margin-top: 18pt;
+    margin-bottom: 12pt;
+    page-break-after: avoid;
+}
+
+h5, h6 {
+    font-size: 11pt;
+    font-weight: 600;
+    color: #7f8c8d;
+    margin-top: 15pt;
+    margin-bottom: 10pt;
+    page-break-after: avoid;
+}
+
+/* Paragraphs */
+p {
+    margin-bottom: 14pt;
+    text-align: justify;
+    orphans: 2;
+    widows: 2;
+}
+
+/* Lists with enhanced styling */
+ul, ol {
+    margin-bottom: 16pt;
+    padding-left: 28pt;
+}
+
+li {
+    margin-bottom: 8pt;
+    line-height: 1.5;
+}
+
+ul li::marker {
+    color: #3498db;
+    font-size: 1.2em;
+}
+
+ol li::marker {
+    color: #e74c3c;
+    font-weight: 600;
+}
+
+/* Nested lists */
+ul ul, ol ol, ul ol, ol ul {
+    margin-top: 6pt;
+    margin-bottom: 6pt;
+}
+
+/* Strong and emphasis */
+strong, b {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+em, i {
+    font-style: italic;
+    color: #34495e;
+}
+
+/* Code styling */
+code {
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    background-color: #f8f9fa;
+    padding: 3pt 6pt;
+    border-radius: 4pt;
+    font-size: 10pt;
+    color: #e74c3c;
+    border: 1pt solid #dee2e6;
+}
+
+pre {
+    background-color: #f8f9fa;
+    border: 1pt solid #dee2e6;
+    border-left: 4pt solid #3498db;
+    border-radius: 6pt;
+    padding: 18pt;
+    margin: 18pt 0;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 10pt;
+    line-height: 1.4;
+    overflow-x: auto;
+    page-break-inside: avoid;
+    box-shadow: 0 2pt 4pt rgba(0,0,0,0.1);
+}
+
+/* Blockquotes */
+blockquote {
+    border-left: 5pt solid #3498db;
+    margin: 25pt 0;
+    padding: 15pt 25pt;
+    background: linear-gradient(90deg, rgba(52, 152, 219, 0.1), transparent);
+    font-style: italic;
+    color: #34495e;
+    page-break-inside: avoid;
+    border-radius: 0 8pt 8pt 0;
+    box-shadow: 0 2pt 4pt rgba(52, 152, 219, 0.1);
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 25pt 0;
+    page-break-inside: avoid;
+    box-shadow: 0 2pt 8pt rgba(0,0,0,0.1);
+    border-radius: 8pt;
+    overflow: hidden;
+}
+
+th, td {
+    border: 1pt solid #dee2e6;
+    padding: 12pt 15pt;
+    text-align: left;
+    vertical-align: top;
+}
+
+th {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    font-weight: 600;
+    color: white;
+    text-transform: uppercase;
+    font-size: 10pt;
+    letter-spacing: 0.5pt;
+}
+
+tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+/* Horizontal rules */
+hr {
+    border: none;
+    height: 3pt;
+    background: linear-gradient(90deg, #3498db, #e74c3c, #f39c12, #27ae60);
+    margin: 30pt 0;
+    page-break-after: avoid;
+    border-radius: 2pt;
+}
+
+/* Links */
+a {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: #2980b9;
+}
+
+/* Special classes for program structure */
+.section-info {
+    background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(52, 152, 219, 0.05));
+    border: 2pt solid rgba(52, 152, 219, 0.3);
+    border-radius: 10pt;
+    padding: 20pt;
+    margin: 25pt 0;
+    page-break-inside: avoid;
+    box-shadow: 0 4pt 8pt rgba(52, 152, 219, 0.1);
+}
+
+.objectives {
+    background: linear-gradient(135deg, rgba(39, 174, 96, 0.1), rgba(39, 174, 96, 0.05));
+    border: 2pt solid rgba(39, 174, 96, 0.3);
+    border-radius: 10pt;
+    padding: 20pt;
+    margin: 25pt 0;
+    box-shadow: 0 4pt 8pt rgba(39, 174, 96, 0.1);
+}
+
+.prerequisites {
+    background: linear-gradient(135deg, rgba(243, 156, 18, 0.1), rgba(243, 156, 18, 0.05));
+    border: 2pt solid rgba(243, 156, 18, 0.3);
+    border-radius: 10pt;
+    padding: 20pt;
+    margin: 25pt 0;
+    box-shadow: 0 4pt 8pt rgba(243, 156, 18, 0.1);
+}
+
+.contact-info {
+    background: linear-gradient(135deg, rgba(155, 89, 182, 0.1), rgba(155, 89, 182, 0.05));
+    border: 2pt solid rgba(155, 89, 182, 0.3);
+    border-radius: 10pt;
+    padding: 20pt;
+    margin: 25pt 0;
+    box-shadow: 0 4pt 8pt rgba(155, 89, 182, 0.1);
+}
+
+/* Emoji support and styling */
+.emoji {
+    font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+    font-size: 1.3em;
+    vertical-align: middle;
+    margin-right: 6pt;
+}
+
+/* Enhanced styling for specific content */
+.duration, .level, .audience {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.time-block {
+    background: rgba(52, 152, 219, 0.05);
+    padding: 8pt 12pt;
+    border-radius: 6pt;
+    border-left: 3pt solid #3498db;
+    margin: 8pt 0;
+}
+
+/* Print-specific styles */
+@media print {
+    body {
+        font-size: 11pt;
+        background: white;
+    }
+    
+    h1 {
+        page-break-before: auto;
+        background: #f8f9fa;
+    }
+    
+    h2, h3, h4, h5, h6 {
+        page-break-after: avoid;
+    }
+    
+    img {
+        max-width: 100%;
+        page-break-inside: avoid;
+    }
+    
+    pre, blockquote, .section-info, .objectives, .prerequisites, .contact-info {
+        page-break-inside: avoid;
+    }
+    
+    table {
+        page-break-inside: avoid;
+    }
+}

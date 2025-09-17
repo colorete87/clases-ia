@@ -11,7 +11,7 @@ import argparse
 from pathlib import Path
 from typing import List
 
-def generate_pdfs_from_marp(marp_dir: str, pdf_dir: str = None, theme: str = None) -> List[str]:
+def generate_pdfs_from_marp(marp_dir: str, pdf_dir: str = None, theme: str = None, project_dir: str = None) -> List[str]:
     """Generate PDF files from Marp files"""
     
     marp_path = Path(marp_dir)
@@ -44,15 +44,30 @@ def generate_pdfs_from_marp(marp_dir: str, pdf_dir: str = None, theme: str = Non
             # Generate PDF using Marp CLI
             cmd_parts = ["marp", str(marp_file), "--pdf", "--output", str(pdf_file), "--allow-local-files"]
             
-            # Add theme if specified
+            # Determine CSS theme to use
+            css_file = None
+            
             if theme:
-                # Look for CSS file in project directory
-                project_dir = Path.cwd()
-                css_file = project_dir / f"{theme}.css"
-                if css_file.exists():
-                    cmd_parts.extend(["--theme", str(css_file)])
-                else:
-                    print(f"⚠️  Theme file {css_file} not found, using default theme")
+                # Look for CSS file in script directory (legacy behavior)
+                script_dir = Path(__file__).parent
+                css_file = script_dir / f"{theme}.css"
+                if not css_file.exists():
+                    print(f"⚠️  Theme file {css_file} not found, trying presentation/style.css")
+                    css_file = None
+            
+            # If no theme specified or theme not found, try presentation/style.css
+            if not css_file and project_dir:
+                proj_dir = Path(project_dir)
+                style_css = proj_dir / "presentation/style.css"
+                if style_css.exists():
+                    css_file = style_css
+                    print(f"📄 Using theme: {css_file}")
+            
+            # Add theme to command if found
+            if css_file and css_file.exists():
+                cmd_parts.extend(["--theme", str(css_file)])
+            else:
+                print("⚠️  No theme file found, using Marp default theme")
             
             cmd = " ".join(cmd_parts)
             result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
@@ -112,7 +127,7 @@ def main():
     
     try:
         # Convert Marp files to PDF
-        pdf_files = generate_pdfs_from_marp(str(input_path), str(output_path), args.theme)
+        pdf_files = generate_pdfs_from_marp(str(input_path), str(output_path), args.theme, str(project_dir))
         
         if pdf_files:
             print(f"\n🎉 Conversion completed!")

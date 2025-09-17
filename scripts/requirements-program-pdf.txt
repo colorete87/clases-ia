@@ -1,0 +1,12 @@
+# Requirements for convert_program_to_pdf.py script
+# Install with: pip install -r requirements-program-pdf.txt
+
+# Core dependencies
+markdown>=3.4.0
+weasyprint>=60.0
+
+# Alternative PDF generation (if weasyprint fails)
+pdfkit>=1.0.0
+
+# Optional enhancements
+Pygments>=2.15.0  # For syntax highlighting in code blocks
