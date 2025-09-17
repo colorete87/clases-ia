@@ -3,14 +3,14 @@
 section {
     font-family: 'Arial', sans-serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+    color: #2c3e50;
     padding: 40px;
     position: relative;
 }
 
 h1, h2, h3 {
-    color: #222;
-    text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+    color: #1a252f;
+    text-shadow: 1px 1px 3px rgba(255,255,255,0.8);
 }
 
 h1 {
@@ -97,7 +97,7 @@ hr {
     text-align: center;
     font-size: 0.7em;
     font-weight: bold;
-    color: #333;
+    color: #1a252f;
     background: rgba(255, 255, 255, 0.95);
     padding: 8px 15px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -112,7 +112,7 @@ hr {
     right: 0;
     text-align: center;
     font-size: 0.6em;
-    color: #666;
+    color: #34495e;
     background: rgba(255, 255, 255, 0.9);
     padding: 6px 15px;
     box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
